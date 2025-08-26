@@ -3,8 +3,8 @@
  * Prevents abuse and ensures fair usage of the API
  * Implements both rate limiting and slow down strategies
  */
-import rateLimit from 'express-rate-limit';
-import slowDown from 'express-slow-down';
+import rateLimit from "express-rate-limit";
+import slowDown from "express-slow-down";
 
 /**
  * General API rate limiter
@@ -14,18 +14,18 @@ export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // Limit each IP to 100 requests per windowMs
   message: {
-    error: 'Too many requests from this IP, please try again later.',
-    retryAfter: '15 minutes'
+    error: "Too many requests from this IP, please try again later.",
+    retryAfter: "15 minutes",
   },
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   handler: (req, res) => {
     res.status(429).json({
       success: false,
-      message: 'Too many requests from this IP, please try again later.',
-      retryAfter: '15 minutes'
+      message: "Too many requests from this IP, please try again later.",
+      retryAfter: "15 minutes",
     });
-  }
+  },
 });
 
 /**
@@ -36,18 +36,18 @@ export const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // Limit each IP to 5 requests per windowMs
   message: {
-    error: 'Too many authentication attempts, please try again later.',
-    retryAfter: '15 minutes'
+    error: "Too many authentication attempts, please try again later.",
+    retryAfter: "15 minutes",
   },
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
     res.status(429).json({
       success: false,
-      message: 'Too many authentication attempts, please try again later.',
-      retryAfter: '15 minutes'
+      message: "Too many authentication attempts, please try again later.",
+      retryAfter: "15 minutes",
     });
-  }
+  },
 });
 
 /**
@@ -57,7 +57,10 @@ export const authLimiter = rateLimit({
 export const speedLimiter = slowDown({
   windowMs: 15 * 60 * 1000, // 15 minutes
   delayAfter: 50, // Allow 50 requests per 15 minutes, then...
-  delayMs: 500, // Add 500ms delay per request above 50
+  delayMs: (used, req) => {
+    const delayAfter = req.slowDown.limit;
+    return (used - delayAfter) * 500;
+  },
   maxDelayMs: 20000, // Maximum delay of 20 seconds
 });
 
@@ -69,18 +72,18 @@ export const uploadLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
   max: 10, // Limit each IP to 10 uploads per hour
   message: {
-    error: 'Too many file uploads, please try again later.',
-    retryAfter: '1 hour'
+    error: "Too many file uploads, please try again later.",
+    retryAfter: "1 hour",
   },
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
     res.status(429).json({
       success: false,
-      message: 'Too many file uploads, please try again later.',
-      retryAfter: '1 hour'
+      message: "Too many file uploads, please try again later.",
+      retryAfter: "1 hour",
     });
-  }
+  },
 });
 
 /**
@@ -91,16 +94,16 @@ export const searchLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
   max: 30, // Limit each IP to 30 searches per 5 minutes
   message: {
-    error: 'Too many search requests, please try again later.',
-    retryAfter: '5 minutes'
+    error: "Too many search requests, please try again later.",
+    retryAfter: "5 minutes",
   },
   standardHeaders: true,
   legacyHeaders: false,
   handler: (req, res) => {
     res.status(429).json({
       success: false,
-      message: 'Too many search requests, please try again later.',
-      retryAfter: '5 minutes'
+      message: "Too many search requests, please try again later.",
+      retryAfter: "5 minutes",
     });
-  }
+  },
 });
