@@ -1,0 +1,38 @@
+body {
+  background-color: black !important;
+  color: white !important;
+}
+.swagger-ui {
+  font-family: "Brandon Grotesque", sans-serif !important;
+  color: white !important;
+}
+
+.swagger-ui .info h1,
+.swagger-ui .info h2,
+.swagger-ui .info h3,
+.swagger-ui .info h4,
+.swagger-ui .info h5,
+.swagger-ui .info li,
+.swagger-ui .info p,
+.swagger-ui .info table {
+  font-family: "Roboto", sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 100 !important;
+  margin-left: 20px !important;
+}
+
+.swagger-ui .info li {
+  font-size: 20px !important;
+  list-style: none !important;
+  position: relative !important;
+  padding-left: 25px !important;
+  margin-bottom: 10px !important;
+}
+
+.swagger-ui .info li::before {
+  content: "-" !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  font-size: 32px !important;
+}

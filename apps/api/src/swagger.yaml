@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  title: Mero Tasbir APIs
+  description: |
+    Photography and Event Industry Services API
+    
+    ## Features
+    - User management and authentication
+    - Event booking and management
+    - Photography services
+    - Rate limiting and security
+    - Input validation and sanitization
+    
+    ## Security
+    - Rate limiting per IP
+    - Request size limits
+    - Input sanitization
+    - Security headers
+  version: 1.0.0
+  contact:
+    name: Mero Tasbir Team
+    email: support@merotasbir.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:5000
+    description: Development server
+  - url: https://api.merotasbir.com
+    description: Production server
+
+tags:
+  - name: Health
+    description: API health and status endpoints
+  - name: API Info
+    description: API version and information endpoints
+  - name: Users
+    description: User management operations
+  - name: Events
+    description: Event booking and management
+  - name: Services
+    description: Photography and event services
+
+paths:
+  /api/v1/health:
+    get:
+      tags:
+        - Health
+      summary: Health Check
+      description: Check if the API is running and healthy
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '500':
+          description: API is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /:
+    get:
+      tags:
+        - API Info
+      summary: API Root
+      description: Redirects to API v1 information
+      responses:
+        '302':
+          description: Redirect to /api/v1
+          headers:
+            Location:
+              description: Redirect location
+              schema:
+                type: string
+                example: "/api/v1"
+
+  /docs:
+    get:
+      tags:
+        - API Info
+      summary: API Documentation
+      description: Interactive Swagger documentation
+      responses:
+        '200':
+          description: Swagger UI interface
+          content:
+            text/html:
+              schema:
+                type: string
+
+  /api/v1:
+    get:
+      tags:
+        - API Info
+      summary: API Information
+      description: Get API version and available endpoints
+      responses:
+        '200':
+          description: API information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiV1Response'
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "API is healthy"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        uptime:
+          type: number
+          description: Server uptime in seconds
+          example: 3600
+        version:
+          type: string
+          example: "1.0.0"
+
+    ApiV1Response:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Mero Tasbir API v1"
+        version:
+          type: string
+          example: "1.0.0"
+        endpoints:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+                example: "/api/v1/health"
+              method:
+                type: string
+                example: "GET"
+              description:
+                type: string
+                example: "Health check endpoint"
+        features:
+          type: array
+          items:
+            type: string
+          example:
+            - "Rate limiting"
+            - "Input validation"
+            - "Security headers"
+            - "Compression"
+            - "CORS support"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Something went wrong"
+        error:
+          type: string
+          example: "Internal server error"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication
+    
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token for authentication
+
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+x-tagGroups:
+  - name: Core
+    tags:
+      - Health
+      - API Info
+  - name: Business
+    tags:
+      - Users
+      - Events
+      - Services

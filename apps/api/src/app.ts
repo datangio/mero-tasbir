@@ -28,8 +28,21 @@ import {
   sanitizeInput,
 } from "./middleware";
 
+// Swagger documentation
+import yaml from "yaml";
+import fs from "fs";
+import path from "path";
+import swaggerUi from "swagger-ui-express";
+
+// Load Swagger documentation
+const file = fs.readFileSync(path.join(__dirname, "swagger.yaml"), "utf8");
+const swaggerDocument = yaml.parse(file);
+
 const app: Application = express();
 const httpServer = createServer(app);
+
+// Serve static files for Swagger styling
+app.use(express.static(path.join(__dirname, "public")));
 
 /**
  * Security and middleware configuration
@@ -79,6 +92,23 @@ app.use(sanitizeInput);
  */
 app.use("/api/v1/health", healthRoutes);
 app.use("/api/v1", v1Routes);
+
+// Swagger documentation at /docs
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+      docExpansion: "none", //collapse all the endpoints by default
+      requestInterceptor: (req: { headers: Record<string, string> }) => {
+        req.headers["Content-Type"] = "application/json";
+        return req;
+      },
+    },
+    customSiteTitle: "Mero Tasbir API Documentation",
+    customCssUrl: "/swagger-custom.css",
+  })
+);
 
 /**
  * 404 handler for unmatched routes
