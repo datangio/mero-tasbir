@@ -25,8 +25,6 @@ import {
   requestTimeout,
   securityHeaders,
   userAgentValidator,
-  // Validation
-  sanitizeInput,
 } from "./middleware";
 
 // Swagger documentation
@@ -83,9 +81,6 @@ app.use(speedLimiter);
 // Body parsing
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
-
-// Input sanitization
-app.use(sanitizeInput);
 
 /**
  * API route configuration
