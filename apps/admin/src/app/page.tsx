@@ -1,7 +1,9 @@
+import { AdminLogin } from "@repo/ui";
+
 const HomePage = () => {
   return (
     <div>
-      <h2 className="text-2xl font-bold">Hello World</h2>
+      <AdminLogin />
     </div>
   );
 };
