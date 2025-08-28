@@ -10,6 +10,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import healthRoutes from "./routes/health";
 import v1Routes from "./routes/v1";
+import adminRoutes from "./routes/admin.route";
 import { config } from "./config";
 
 import {
@@ -24,8 +25,6 @@ import {
   requestTimeout,
   securityHeaders,
   userAgentValidator,
-  // Validation
-  sanitizeInput,
 } from "./middleware";
 
 // Swagger documentation
@@ -83,15 +82,13 @@ app.use(speedLimiter);
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Input sanitization
-app.use(sanitizeInput);
-
 /**
  * API route configuration
  * All routes are prefixed with /api/v1 for versioning
  */
 app.use("/api/v1/health", healthRoutes);
 app.use("/api/v1", v1Routes);
+app.use("/api/v1/admin", adminRoutes);
 
 // Swagger documentation at /docs
 app.use(

@@ -9,8 +9,8 @@ export {
   authLimiter,
   speedLimiter,
   uploadLimiter,
-  searchLimiter
-} from './rateLimiter';
+  searchLimiter,
+} from "./rateLimiter";
 
 // Security middleware
 export {
@@ -21,20 +21,40 @@ export {
   requestTimeout,
   securityHeaders,
   ipWhitelist,
-  userAgentValidator
-} from './security';
+  userAgentValidator,
+} from "./security";
 
-// Validation middleware
+// Modern Zod-based validation middleware (RECOMMENDED)
 export {
-  handleValidationErrors,
-  validateUserCreation,
-  validateUserUpdate,
-  validateId,
-  validatePagination,
-  validateSearch,
-  validateFileUpload,
-  validateEventCreation,
-  validateServiceCreation,
-  validateAuth,
-  sanitizeInput
-} from './validation';
+  validateZod,
+  validateAdminLogin,
+  validateAdminRegister,
+  validateAdminUpdate,
+  validateUserCreate,
+  validateUserUpdate as validateUserUpdateZod,
+  validateIdParam,
+  validatePagination as validatePaginationZod,
+  validateSearch as validateSearchZod,
+  validateFileUpload as validateFileUploadZod,
+  sanitizeInput,
+  adminLoginSchema,
+  adminRegisterSchema,
+  adminUpdateSchema,
+  userCreateSchema,
+  userUpdateSchema,
+  idParamSchema,
+  paginationSchema,
+  searchSchema,
+  fileUploadSchema,
+} from "./zodValidation";
+
+// Type exports from Zod validation
+export type {
+  AdminLoginData,
+  AdminRegisterData,
+  AdminUpdateData,
+  UserCreateData,
+  UserUpdateData,
+  PaginationData,
+  SearchData,
+} from "./zodValidation";

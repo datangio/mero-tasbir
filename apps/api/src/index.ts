@@ -1,5 +1,6 @@
 import httpServer from "./app";
 import { config } from "./config";
+import { dbConnection } from "./database/db.config";
 
 /**
  * Start the HTTP server
@@ -17,4 +18,10 @@ const startServer = async () => {
   });
 };
 
-startServer();
+dbConnection()
+  .then(() => {
+    startServer();
+  })
+  .catch(err => {
+    console.log("Database connection failed", err);
+  });

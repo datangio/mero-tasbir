@@ -65,3 +65,86 @@ export interface ErrorResponse {
   /** ISO timestamp of when the error occurred */
   timestamp: string;
 }
+
+/**
+ * Admin user data structure (without password)
+ * Used in API responses to represent admin user information
+ */
+export interface AdminUser {
+  /** Unique admin identifier (cuid string) */
+  id: string;
+  /** Admin email address */
+  email: string;
+  /** Admin full name */
+  name: string;
+  /** Admin role */
+  role: string;
+  /** Admin avatar URL (optional) */
+  avatar?: string | null;
+}
+
+/**
+ * Admin login response structure
+ * Returned after successful admin authentication
+ */
+export interface AdminLoginResponse {
+  /** Success message */
+  message: string;
+  /** JWT authentication token */
+  token: string;
+  /** Admin user information */
+  admin: AdminUser;
+}
+
+/**
+ * Admin update response structure
+ * Returned after successful admin profile update
+ */
+export interface AdminUpdateResponse {
+  /** Success message */
+  message: string;
+  /** Updated admin user information */
+  admin: AdminUser & {
+    /** Account active status */
+    isActive: boolean;
+    /** Account creation timestamp */
+    createdAt: Date;
+    /** Last update timestamp */
+    updatedAt: Date;
+  };
+}
+
+/**
+ * Admin soft delete response structure
+ * Returned after successful admin account deactivation
+ */
+export interface AdminSoftDeleteResponse {
+  /** Success message */
+  message: string;
+  /** Deactivated admin information */
+  admin: {
+    /** Admin ID */
+    id: string;
+    /** Admin email */
+    email: string;
+    /** Admin name */
+    name: string;
+    /** Admin role */
+    role: string;
+    /** Account active status (will be false) */
+    isActive: boolean;
+    /** Last update timestamp */
+    updatedAt: Date;
+  };
+}
+
+/**
+ * Admin hard delete response structure
+ * Returned after successful admin account permanent deletion
+ */
+export interface AdminHardDeleteResponse {
+  /** Success message */
+  message: string;
+  /** ID of the deleted admin */
+  adminId: string;
+}
