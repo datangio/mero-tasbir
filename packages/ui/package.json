@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@tailwindcss/cli": "^4.1.12",
     "@types/node": "^22.15.3",
     "@types/react": "19.1.0",
@@ -38,7 +38,11 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.62.0",
+    "react-hot-toast": "^2.6.0",
+    "zod": "^4.1.4"
   }
 }
