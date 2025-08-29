@@ -8,3 +8,4 @@ export { AdminDashboard } from "./admin/dashboard.admin";
 export { AdminDashboardSidebar } from "./admin/dashboard.sidebar";
 export { AdminDashboardMain } from "./admin/dashboard.main";
 export { SplitScreenAdmin } from "./admin/splitscree.admin";
+export { SignUp } from "./user/signup";

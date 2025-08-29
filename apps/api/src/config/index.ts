@@ -78,7 +78,7 @@ function createConfig(): AppConfig {
   validateEnv();
 
   const env = process.env.NODE_ENV || "development";
-  const port = parseInt(process.env.PORT || "5000", 10);
+  const port = parseInt(process.env.PORT || "5001", 10);
   const host = process.env.HOST || "localhost";
 
   return {
@@ -88,7 +88,12 @@ function createConfig(): AppConfig {
       env,
       corsOrigin: process.env.CORS_ORIGIN
         ? process.env.CORS_ORIGIN.split(",")
-        : ["http://localhost:3000", "http://localhost:5000"],
+        : [
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "http://localhost:3002",
+            "http://localhost:3003",
+          ],
     },
     jwt: {
       secret:
