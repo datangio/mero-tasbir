@@ -1,11 +1,11 @@
-import { AdminDashboard } from "@repo/ui/index";
+import { AdminLayout, Dashboard } from "@repo/ui/index";
 
-const Dashboard = () => {
+const DashboardPage = () => {
   return (
-    <>
-      <AdminDashboard />
-    </>
+    <AdminLayout pageTitle="Dashboard Overview">
+      <Dashboard />
+    </AdminLayout>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
