@@ -100,7 +100,7 @@ export default function CareerPage() {
 
     const [query, setQuery] = useState('');
   const [location, setLocation] = useState('All Location');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
