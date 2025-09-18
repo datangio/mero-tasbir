@@ -103,11 +103,13 @@ export const weddingValidationRules: ValidationRule<CreateWeddingDto>[] = [
   },
   {
     field: "couple",
-    validator: validators.minLength(2, "Couple names"),
+    validator: (value: unknown) =>
+      validators.minLength(2, "Couple names")(value as string),
   },
   {
     field: "couple",
-    validator: validators.maxLength(100, "Couple names"),
+    validator: (value: unknown) =>
+      validators.maxLength(100, "Couple names")(value as string),
   },
   {
     field: "date",
@@ -119,31 +121,35 @@ export const weddingValidationRules: ValidationRule<CreateWeddingDto>[] = [
   },
   {
     field: "venue",
-    validator: validators.minLength(2, "Venue"),
+    validator: (value: unknown) =>
+      validators.minLength(2, "Venue")(value as string),
   },
   {
     field: "venue",
-    validator: validators.maxLength(100, "Venue"),
+    validator: (value: unknown) =>
+      validators.maxLength(100, "Venue")(value as string),
   },
   {
     field: "status",
-    validator: validators.validStatus,
+    validator: (value: unknown) => validators.validStatus(value as string),
   },
   {
     field: "budget",
-    validator: validators.positive("Budget"),
+    validator: (value: unknown) =>
+      validators.positive("Budget")(value as number),
   },
   {
     field: "guests",
-    validator: validators.positive("Number of guests"),
+    validator: (value: unknown) =>
+      validators.positive("Number of guests")(value as number),
   },
   {
     field: "contactEmail",
-    validator: validators.email,
+    validator: (value: unknown) => validators.email(value as string),
   },
   {
     field: "contactPhone",
-    validator: validators.phone,
+    validator: (value: unknown) => validators.phone(value as string),
   },
 ];
 

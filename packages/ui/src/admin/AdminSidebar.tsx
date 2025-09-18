@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavigationItem } from "../types/admin.types";
+import type { NavigationItem } from "../types/admin.types";
 import {
   NAVIGATION_ITEMS,
   ANIMATION_VARIANTS,

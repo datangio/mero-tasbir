@@ -43,12 +43,8 @@ export const useSidebar = (
       setActivePage(pageName);
 
       if (path && typeof window !== "undefined") {
-        // Use Next.js router if available, fallback to window.location
-        if (window.next && window.next.router) {
-          window.next.router.push(path);
-        } else {
-          window.location.href = path;
-        }
+        // Simple navigation fallback
+        window.location.href = path;
       }
     },
     [setActivePage]

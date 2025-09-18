@@ -70,19 +70,8 @@ export interface FormState<T> {
   isSubmitting: boolean;
 }
 
-// Animation types
-export interface AnimationVariants {
-  [key: string]: {
-    [property: string]: string | number;
-    transition?: {
-      duration: number;
-      ease: string;
-      type?: string;
-      stiffness?: number;
-      damping?: number;
-    };
-  };
-}
+// Animation types - imported from wedding.types.ts
+export { AnimationVariants } from "./wedding.types";
 
 // API Response types
 export interface ApiResponse<T> {

@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "title-regular";
+  src: url("/title-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.title-regular {
+  font-family: "title-regular";
+}

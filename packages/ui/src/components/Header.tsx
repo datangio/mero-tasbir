@@ -15,6 +15,7 @@ import {
   Cake,
   User,
   Search,
+  Calendar,
 } from "lucide-react";
 
 interface HeaderProps {
@@ -59,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
       transition: {
         delay: 0.2 + i * 0.1,
         duration: 0.3,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     }),
   };
@@ -72,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({
       transition: {
         delay: 0.1,
         duration: 0.3,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
       },
     },
   };
@@ -536,6 +537,17 @@ export const Header: React.FC<HeaderProps> = ({
                                   Wedding Photography
                                 </span>
                                 <Heart className="h-4 w-4 text-gray-500" />
+                              </div>
+                            </a>
+                            <a
+                              href="/booking"
+                              className="block rounded-lg border border-pink-200 bg-pink-50 p-3 transition-colors hover:bg-white"
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium text-pink-700">
+                                  Book Wedding Photography
+                                </span>
+                                <Calendar className="h-4 w-4 text-pink-500" />
                               </div>
                             </a>
                             <a

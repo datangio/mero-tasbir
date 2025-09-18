@@ -27,12 +27,25 @@ export { StatusBadge } from "./components/StatusBadge";
 export { LoadingSpinner } from "./components/LoadingSpinner";
 export { ErrorBoundary } from "./components/ErrorBoundary";
 export { Header } from "./components/Header";
+export { WeddingBooking } from "./components/WeddingBooking";
+export { WeddingBookingRefactored } from "./components/WeddingBookingRefactored";
+export { HeroSection } from "./components/wedding/HeroSection";
+export { PricingSection } from "./components/wedding/PricingSection";
+export { BookingForm } from "./components/wedding/BookingForm";
 
 // Types
 export * from "./types/admin.types";
+export * from "./types/wedding.types";
 
 // Utils
 export * from "./utils/validation";
 
 // Constants
 export * from "./constants/admin.constants";
+export * from "./constants/wedding.constants";
+export * from "./constants/animations.constants";
+
+// Hooks
+export { useBookingForm } from "./hooks/useBookingForm";
+export { useCarousel } from "./hooks/useCarousel";
+export { useRotatingText } from "./hooks/useRotatingText";
