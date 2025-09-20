@@ -2,8 +2,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Wedding Page Component
-const WeddingPage = () => {
+export const WeddingPageContent = () => {
   const [weddings, setWeddings] = useState([
     {
       id: 1,
@@ -83,7 +82,12 @@ const WeddingPage = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       {/* Wedding Stats */}
       <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
         <motion.div
@@ -309,135 +313,6 @@ const WeddingPage = () => {
           </table>
         </div>
       </div>
-    </div>
-  );
-};
-
-// Default Dashboard Component
-const DefaultDashboard = () => (
-  <div className="space-y-6">
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <motion.div
-        className="rounded-lg border bg-white p-6 shadow-sm"
-        whileHover={{ scale: 1.02 }}
-      >
-        <h3 className="text-lg font-medium text-gray-900">Total Events</h3>
-        <p className="text-3xl font-bold text-blue-600">24</p>
-      </motion.div>
-      <motion.div
-        className="rounded-lg border bg-white p-6 shadow-sm"
-        whileHover={{ scale: 1.02 }}
-      >
-        <h3 className="text-lg font-medium text-gray-900">Active Projects</h3>
-        <p className="text-3xl font-bold text-green-600">12</p>
-      </motion.div>
-      <motion.div
-        className="rounded-lg border bg-white p-6 shadow-sm"
-        whileHover={{ scale: 1.02 }}
-      >
-        <h3 className="text-lg font-medium text-gray-900">Revenue</h3>
-        <p className="text-3xl font-bold text-purple-600">$125k</p>
-      </motion.div>
-    </div>
-    <div className="rounded-lg border bg-white p-6 shadow-sm">
-      <h3 className="mb-4 text-lg font-medium text-gray-900">
-        Recent Activity
-      </h3>
-      <p className="text-gray-600">Dashboard content goes here...</p>
-    </div>
-  </div>
-);
-
-export const AdminDashboardMain = ({
-  activePage = "Dashboard",
-}: {
-  activePage?: string;
-}) => {
-  const getPageTitle = (page: string) => {
-    switch (page) {
-      case "Wedding":
-        return "Wedding Management";
-      case "Event":
-        return "Event Management";
-      case "Jobs":
-        return "Job Management";
-      case "Analytics":
-        return "Analytics Dashboard";
-      default:
-        return "Dashboard";
-    }
-  };
-
-  const renderPageContent = () => {
-    switch (activePage) {
-      case "Wedding":
-        return <WeddingPage />;
-      case "Event":
-        return (
-          <div className="py-12 text-center text-gray-500">
-            Event management coming soon...
-          </div>
-        );
-      case "Jobs":
-        return (
-          <div className="py-12 text-center text-gray-500">
-            Job management coming soon...
-          </div>
-        );
-      case "Analytics":
-        return (
-          <div className="py-12 text-center text-gray-500">
-            Analytics dashboard coming soon...
-          </div>
-        );
-      default:
-        return <DefaultDashboard />;
-    }
-  };
-
-  return (
-    <div className="flex flex-1 flex-col overflow-hidden">
-      {/* Header */}
-      <header className="border-b border-gray-200 bg-white px-6 py-4 shadow-sm">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-gray-800">
-            {getPageTitle(activePage)}
-          </h1>
-          <div className="flex items-center space-x-4">
-            <motion.button
-              className="rounded-lg p-2 transition-colors hover:bg-gray-100"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              🔔
-            </motion.button>
-            <motion.button
-              className="rounded-lg p-2 transition-colors hover:bg-gray-100"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              ⚙️
-            </motion.button>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-1 overflow-auto bg-gray-50 p-6">
-        <div className="mx-auto max-w-7xl">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activePage}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderPageContent()}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </main>
-    </div>
+    </motion.div>
   );
 };

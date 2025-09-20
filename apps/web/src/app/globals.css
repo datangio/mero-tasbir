@@ -1,9 +1,21 @@
 @import "tailwindcss";
 @import "@repo/tailwind-config";
+@import "@repo/ui/styles.css";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+@font-face {
+  font-family: "title-regular";
+  src: url("/title-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.title-regular {
+  font-family: "title-regular";
 }
 
 @theme inline {
