@@ -2,20 +2,57 @@
 @import "@repo/tailwind-config";
 @import "@repo/ui/styles.css";
 
+/* Hide hamburger menu on large screens */
+@media (min-width: 1024px) {
+  .hamburger-menu {
+    display: none !important;
+  }
+  
+  /* Hide mobile navigation icons on large screens */
+  .mobile-nav-icons {
+    display: none !important;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
 
+/* Web app specific styles */
+
 @font-face {
   font-family: "title-regular";
-  src: url("/title-regular.woff2") format("woff2");
+  src: url("/font/title-regular.f7f2da3f7d1f78b3f788.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
 
+@font-face {
+  font-family: "national-park";
+  src: url("/font/NationalPark-VariableVF.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "ballmain-regular";
+  src: url("/font/ballmain.regular.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+
 .title-regular {
   font-family: "title-regular";
+}
+
+.national-park {
+  font-family: "national-park";
+}
+
+.ballmain-regular {
+  font-family: "ballmain-regular";
 }
 
 @theme inline {
@@ -35,8 +72,21 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "title-regular";
 }
+
+/* Ensure auth page has white background and no scroll */
+.auth-page {
+  background-color: white !important;
+}
+
+/* Prevent body scroll on auth page */
+body.auth-page-body {
+  overflow: hidden;
+  height: calc(100vh - 80px);
+}
+
+
 
 @keyframes marquee-ltr {
   0% {
@@ -47,9 +97,23 @@ body {
   }
 }
 
+@keyframes marquee-rtl {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .animate-marquee-ltr {
   display: flex;
   animation: marquee-ltr 10s linear infinite;
+}
+
+.animate-marquee-rtl {
+  display: flex;
+  animation: marquee-rtl 10s linear infinite;
 }
 
 .animate-fade-in {

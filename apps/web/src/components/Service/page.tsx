@@ -56,7 +56,7 @@ const ServiceCarousel: React.FC = () => {
     id: 6,
     title: "Event Management Services",
     subtitle: "End-to-end planning for weddings, receptions, Pasni & more",
-    color: "bg-orange-600", // Energetic orange for dynamic event planning
+    color: "#FB7F33", // Energetic orange for dynamic event planning
     image: "/images/event-management.jpg",
   }
 ];
@@ -104,7 +104,7 @@ const ServiceCarousel: React.FC = () => {
     }
   };
 
-  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+  const handleTouchEnd = () => {
     if (!startX.current) return;
 
     const threshold = cardWidth / 3;
@@ -150,7 +150,8 @@ const ServiceCarousel: React.FC = () => {
         <button
           type="button"
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-2 text-gray-700 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="absolute left-4 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-2 text-black shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': '#FB7F33' } as React.CSSProperties}
           aria-label="Previous"
         >
           <svg
@@ -188,13 +189,14 @@ const ServiceCarousel: React.FC = () => {
               <div className="flex h-full">
                 {/* Text Section */}
                 <div
-                  className={`${service.color} flex w-1/2 flex-col justify-center rounded-bl-2xl rounded-tl-2xl p-5 text-white`}
+                  className="flex w-1/2 flex-col justify-center rounded-bl-2xl rounded-tl-2xl p-5 text-white"
+                  style={{ backgroundColor: service.color }}
                 >
                   <h3 className="text-lg font-bold">{service.title}</h3>
                   <p className="mt-1 text-sm opacity-90">{service.subtitle}</p>
                   <button
                     type="button"
-                    className="mt-3 self-start rounded-lg bg-white px-3 py-1 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-100"
+                    className="mt-3 self-start rounded-lg bg-white px-3 py-1 text-xs font-medium text-black transition-colors hover:bg-gray-100"
                   >
                     Book now
                   </button>
@@ -220,7 +222,8 @@ const ServiceCarousel: React.FC = () => {
         <button
           type="button"
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-2 text-gray-700 shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-orange-500"
+          className="absolute right-4 top-1/2 z-10 -translate-y-1/2 transform rounded-full bg-white p-2 text-black shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2"
+          style={{ '--tw-ring-color': '#FB7F33' } as React.CSSProperties}
           aria-label="Next"
         >
           <svg

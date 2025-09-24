@@ -52,7 +52,7 @@ export default function AboutPage() {
                 ABOUT US
               </h1>
               <p className="mb-6 leading-relaxed text-gray-700">
-                We are connecting clients and professionals within Nepal's
+                We are connecting clients and professionals within Nepal&apos;s
                 photography and videography industry. It will recognize the
                 growing demand for accessible, high-quality media services and
                 creative resources, bridging the gap between talented

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 
 // Sample data for photographers
@@ -39,14 +39,13 @@ const photographers: Photographer[] = [
 ];
 
 export default function PhotographersPage() {
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % photographers.length);
+    // Navigation logic
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + photographers.length) % photographers.length);
+    // Navigation logic
   };
 
   return (
@@ -64,7 +63,7 @@ export default function PhotographersPage() {
             <div className="w-full max-w-md rounded-xl bg-white/90 backdrop-blur-sm p-6 shadow-xl">
               <h1 className="text-2xl font-bold text-gray-900">Wedding photographers</h1>
               <p className="mt-2 text-gray-700">
-                Discover the top photographers near you who will immortalise your wedding's most precious moments.
+                Discover the top photographers near you who will immortalise your wedding&apos;s most precious moments.
               </p>
               <button className="mt-4 rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 transition-colors">
                 Find photographers

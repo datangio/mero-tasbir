@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 
 export default function NotFound() {
   return (
@@ -13,12 +14,12 @@ export default function NotFound() {
           Page Not Found
         </p>
         <p className="text-gray-600 mt-2 text-sm md:text-base">
-          Sorry, the page you're looking for doesn't exist.
+          Sorry, the page you&apos;re looking for doesn&apos;t exist.
         </p>
         <div className="mt-8">
-          <a href="/" className="inline-block px-6 py-3 text-sm font-medium text-white bg-orange-600 rounded-full shadow-lg transition-transform hover:bg-orange-700 hover:scale-105">
+          <Link href="/" className="inline-block px-6 py-3 text-sm font-medium text-white bg-orange-600 rounded-full shadow-lg transition-transform hover:bg-orange-700 hover:scale-105">
             Go to Homepage
-          </a>
+          </Link>
         </div>
       </div>
     </div>

@@ -34,16 +34,16 @@ export default function Newsletter() {
       <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
         {/* Left Side: Text */}
         <div className="w-full max-w-lg text-center md:text-left">
-          <h2 className="text-3xl font-bold text-gray-900 md:text-4xl">
+          <h2 className="text-3xl font-bold text-black md:text-4xl">
             Professional{' '}
-            <span className="text-orange-700">Photography Solutions</span>{' '}
+            <span style={{ color: '#E06B2A' }}>Photography Solutions</span>{' '}
             for You
           </h2>
         </div>
 
         {/* Right Side: Form */}
         <div className="w-full max-w-md">
-          <h3 className="mb-4 text-lg font-medium text-gray-900">Subscribe to Our Newsletter</h3>
+          <h3 className="mb-4 text-lg font-medium text-black">Subscribe to Our Newsletter</h3>
           <form onSubmit={handleSubmit} className="flex flex-col space-y-4 sm:flex-row sm:space-y-0">
             <input
               type="email"
@@ -54,13 +54,20 @@ export default function Newsletter() {
               }}
               placeholder="Enter your email"
               aria-label="Email address"
-              className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors"
+              className="flex-1 rounded-lg border border-gray-300 px-4 py-3 text-black placeholder-gray-500 focus:outline-none focus:ring-2 transition-colors"
+              style={{ '--tw-ring-color': '#FB7F33', '--tw-border-color': '#FB7F33' } as React.CSSProperties}
               required
             />
             <button
               type="submit"
               disabled={isSubmitted}
-              className="rounded-lg bg-orange-500 px-6 py-3 text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-70 transition-colors"
+              className="rounded-lg px-6 py-3 text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-70 transition-colors"
+              style={{ 
+                backgroundColor: '#FB7F33',
+                '--tw-ring-color': '#FB7F33'
+              } as React.CSSProperties}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E06B2A'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#FB7F33'}
             >
               {isSubmitted ? 'Subscribed!' : 'Subscribe'}
             </button>
@@ -68,7 +75,7 @@ export default function Newsletter() {
 
           {/* Success Message */}
           {isSubmitted && (
-            <p className="mt-2 text-sm text-orange-600 animate-fade-in">
+            <p className="mt-2 text-sm animate-fade-in" style={{ color: '#FB7F33' }}>
               Thank you for subscribing!
             </p>
           )}

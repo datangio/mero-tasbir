@@ -167,7 +167,7 @@ export default function PhotoGallery() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-gray-700">Theme Collections</h2>
             <div className="flex items-center space-x-2">
-              <select className="rounded-full  px-3 py-1 text-sm text-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+              <select className="rounded-full  px-3 py-1 text-sm text-black focus:outline-none focus:ring-2 focus:ring-purple-500">
                 <option value="all">All</option>
                 <option value="trending">Trending</option>
                 <option value="portrait">Portrait</option>

@@ -18,7 +18,7 @@ export default function ContactPage() {
       CONTACT US
     </h1>
     <p className="mb-6 leading-relaxed text-gray-700">
-      Have a question or want to work with us? Reach out — we'd love to hear from you!
+      Have a question or want to work with us? Reach out — we&apos;d love to hear from you!
     </p>
   </div>
 </div>
@@ -167,7 +167,7 @@ export default function ContactPage() {
                   id="name"
                   name="name"
                   required
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-black placeholder-gray-500 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="Enter your full name"
                 />
               </div>
@@ -180,7 +180,7 @@ export default function ContactPage() {
                   id="email"
                   name="email"
                   required
-                  className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 text-black placeholder-gray-500 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   placeholder="you@example.com"
                 />
               </div>

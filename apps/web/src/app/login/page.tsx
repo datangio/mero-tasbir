@@ -41,7 +41,7 @@ export default function LoginPage() {
       </div>
 
       {/* Right Side: Login Form */}
-      <div className="flex w-full items-center justify-center p-6 lg:w-1/2">
+      <div className="flex w-full items-start justify-center px-6 py-0 lg:w-1/2">
         <div className="w-full max-w-md">
           {/* Logo */}
           {/* <div className="mb-6 flex justify-center">
@@ -54,9 +54,12 @@ export default function LoginPage() {
           </div> */}
 
           {/* Title */}
-          <h1 className="mb-6 text-center text-2xl font-semibold text-orange-500">
-            Log in
+          <h1 className="mb-2 text-center text-2xl font-semibold mt-0 text-orange-500">
+            Welcome Back
           </h1>
+          <p className="mb-6 text-center text-sm text-gray-600">
+            Sign in to your Mero Tasbir account
+          </p>
 
           {/* Login Method Tabs */}
           <div className="mb-6 flex border-b border-gray-300">
@@ -67,7 +70,7 @@ export default function LoginPage() {
               className={`flex items-center px-4 py-2 text-sm font-medium transition-colors ${
                 loginMethod === "email"
                   ? "border-b-2 border-orange-500 text-orange-500"
-                  : "text-gray-600 hover:text-gray-800"
+                  : "text-black hover:text-black"
               }`}
               aria-pressed={loginMethod === "email"}
               role="tab"
@@ -84,7 +87,7 @@ export default function LoginPage() {
               className={`flex items-center px-4 py-2 text-sm font-medium transition-colors ${
                 loginMethod === "phone"
                   ? "border-b-2 border-orange-500 text-orange-500"
-                  : "text-gray-600 hover:text-gray-800"
+                  : "text-black hover:text-black"
               }`}
               aria-pressed={loginMethod === "phone"}
               role="tab"
@@ -96,20 +99,20 @@ export default function LoginPage() {
           </div>
 
           {/* Form */}
-          <form className="space-y-4 text-gray-800">
+          <form className="space-y-4 text-black">
             {/* Email or Phone Input */}
             {loginMethod === "email" ? (
               <div>
                 <label
                   htmlFor="email"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-black"
                 >
                   Email Address
                 </label>
                 <input
                   type="email"
                   id="email"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm transition-all focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm transition-all focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                   placeholder="Enter your email"
                   required
                   autoComplete="email"
@@ -119,7 +122,7 @@ export default function LoginPage() {
               <div>
                 <label
                   htmlFor="phone"
-                  className="mb-1 block text-sm font-medium text-gray-700"
+                  className="mb-1 block text-sm font-medium text-black"
                 >
                   Phone Number
                 </label>
@@ -153,7 +156,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="password"
-                className="mb-1 block text-sm font-medium text-gray-700"
+                className="mb-1 block text-sm font-medium text-black"
               >
                 Your password
               </label>
@@ -161,7 +164,7 @@ export default function LoginPage() {
                 <input
                   type={passwordVisible ? "text" : "password"}
                   id="password"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm transition-all focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+                  className="w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm transition-all focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                   placeholder="Enter your password"
                   required
                   autoComplete="current-password"
@@ -169,7 +172,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 transform text-gray-500 hover:text-gray-700 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 transform text-black hover:text-black focus:outline-none"
                   aria-label={
                     passwordVisible ? "Hide password" : "Show password"
                   }
@@ -201,7 +204,7 @@ export default function LoginPage() {
 
             {/* Remember Me & Forgot Password */}
             <div className="flex items-center justify-between">
-              <label className="flex items-center text-sm text-gray-700">
+              <label className="flex items-center text-sm text-black">
                 <input
                   type="checkbox"
                   className="mr-2 h-4 w-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500"
@@ -222,13 +225,13 @@ export default function LoginPage() {
               type="submit"
               className="w-full rounded-lg bg-orange-500 py-2 font-medium text-white shadow-sm transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
             >
-              Log in
+              Sign In
             </button>
 
             {/* OR Separator */}
             <div className="my-6 flex items-center">
               <hr className="flex-grow border-gray-300" />
-              <span className="px-4 text-sm text-gray-500">OR</span>
+              <span className="px-4 text-sm text-black">OR</span>
               <hr className="flex-grow border-gray-300" />
             </div>
 
@@ -236,7 +239,7 @@ export default function LoginPage() {
             <div className="flex gap-3">
               <button
                 type="button"
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-black shadow-sm transition-colors hover:bg-gray-50 focus:outline-none"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -267,7 +270,7 @@ export default function LoginPage() {
 
               <button
                 type="button"
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm transition-colors hover:bg-gray-50 focus:outline-none"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-black shadow-sm transition-colors hover:bg-gray-50 focus:outline-none"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -284,8 +287,8 @@ export default function LoginPage() {
 
             {/* Sign Up Link */}
             <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Don't have an account?{" "}
+              <p className="text-sm text-black">
+                Don&apos;t have an account?{" "}
                 <a
                   href="/signup"
                   className="font-medium text-orange-500 hover:underline"

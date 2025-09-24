@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 
 export default function Footer() {
@@ -8,33 +10,45 @@ export default function Footer() {
           {/* Brand Section */}
           <div>
             <h3 className="text-2xl font-bold">MERO TASBIR</h3>
-            <p className="mt-4 text-gray-300">
+            <p className="mt-4 text-white">
               This is a comprehensive platform connecting clients and
-              professionals within Nepal's photography and videography industry.
+              professionals within Nepal&apos;s photography and videography industry.
             </p>
           </div>
 
           {/* Company Links */}
           <div>
             <h4 className="font-semibold">COMPANY</h4>
-            <ul className="mt-4 space-y-2 text-gray-300">
+            <ul className="mt-4 space-y-2 text-white">
               <li>
-                <a href="#" className="transition-colors hover:text-orange-500">
+                <a href="#" className="transition-colors hover:opacity-80"
+                   style={{ color: 'inherit' }}
+                   onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                   onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}>
                   About us
                 </a>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-orange-500">
+                <a href="#" className="transition-colors hover:opacity-80"
+                   style={{ color: 'inherit' }}
+                   onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                   onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}>
                   Terms & conditions
                 </a>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-orange-500">
+                <a href="#" className="transition-colors hover:opacity-80"
+                   style={{ color: 'inherit' }}
+                   onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                   onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}>
                   Privacy policy
                 </a>
               </li>
               <li>
-                <a href="#" className="transition-colors hover:text-orange-500">
+                <a href="#" className="transition-colors hover:opacity-80"
+                   style={{ color: 'inherit' }}
+                   onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                   onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}>
                   Careers
                 </a>
               </li>
@@ -44,14 +58,14 @@ export default function Footer() {
           {/* Contact Info */}
           <div>
             <h4 className="font-semibold">CONTACT US</h4>
-            <ul className="mt-4 space-y-2 text-gray-300">
+            <ul className="mt-4 space-y-2 text-white">
               <li>Mid-Baneshwor, Kathmandu</li>
               <li>+977-1234567890</li>
               <li>info@merotasbir.com</li>
               <li>merotasbir.com</li>
             </ul>
           </div>
-
+       
           {/* Social Links */}
           <div>
             <h4 className="font-semibold">SOCIAL LINKS</h4>
@@ -105,7 +119,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-gray-400">
+        <div className="mt-8 border-t border-gray-700 pt-6 text-center text-sm text-white">
           © 2025 Mero Tasbir by RISMA MOTION PICTURES PVT. LTD. All rights
           reserved. Powered by
           <a href="https://maptechnepal.com/"> M.A.P. Tech</a>
