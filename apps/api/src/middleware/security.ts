@@ -131,12 +131,17 @@ export const ipWhitelist = (allowedIPs: string[]) => {
 
 /**
  * User agent validation
- * Blocks requests from suspicious user agents
+ * Blocks requests from suspicious user agents (only in production)
  */
 export const userAgentValidator = (req: Request, res: Response, next: NextFunction) => {
+  // Only apply user agent validation in production
+  if (process.env.NODE_ENV !== 'production') {
+    return next();
+  }
+
   const userAgent = req.headers['user-agent'];
   const suspiciousAgents = [
-    'bot', 'crawler', 'spider', 'scraper', 'curl', 'wget', 'python', 'java'
+    'bot', 'crawler', 'spider', 'scraper'
   ];
 
   if (userAgent && suspiciousAgents.some(agent => userAgent.toLowerCase().includes(agent))) {

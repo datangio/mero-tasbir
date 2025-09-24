@@ -29,6 +29,8 @@ export interface CreateMediaData {
   size: number;
   url: string;
   thumbnailUrl?: string;
+  title?: string;
+  type?: string;
   category: MediaCategory;
   clientName?: string;
   description?: string;
@@ -58,6 +60,32 @@ export interface MediaResponse {
   data?: Media | Media[];
   error?: string;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

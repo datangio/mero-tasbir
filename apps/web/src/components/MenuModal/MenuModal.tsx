@@ -248,3 +248,4 @@ export default function MenuModal({ isOpen, onClose }: MenuModalProps) {
     </AnimatePresence>
   );
 }
+

@@ -1,3 +1,4 @@
+
 /**
  * TypeScript types for Event Management System
  * Defines interfaces for events, catering services, and equipment rental
@@ -134,7 +135,6 @@ export interface CateringServiceQueryParams {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
-
 // Equipment Types
 export interface CreateEquipmentRequest {
   name: string;
@@ -198,7 +198,6 @@ export interface EquipmentQueryParams {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
-
 // Event Catering Service Types
 export interface CreateEventCateringServiceRequest {
   eventId: string;
@@ -215,11 +214,11 @@ export interface UpdateEventCateringServiceRequest {
   isConfirmed?: boolean;
   isDelivered?: boolean;
 }
-
 // Event Equipment Rental Types
 export interface CreateEventEquipmentRentalRequest {
   eventId: string;
   equipmentId: string;
+  quantity?: number;
   rentalStartDate: string;
   rentalEndDate: string;
   deliveryAddress?: string;
@@ -296,4 +295,7 @@ export interface EventAnimationVariants {
   slideUp: Record<string, unknown>;
   stagger: Record<string, unknown>;
 }
+
+
+
 

@@ -8,9 +8,7 @@ export const createMediaSchema = z.object({
   size: z.number().int().positive("Size must be positive"),
   url: z.string().url("Invalid URL format"),
   thumbnailUrl: z.string().url("Invalid thumbnail URL format").optional(),
-  category: z.nativeEnum(MediaCategory, {
-    errorMap: () => ({ message: "Invalid media category" })
-  }),
+  category: z.nativeEnum(MediaCategory),
   clientName: z.string().min(1, "Client name is required for client portfolio").optional(),
   description: z.string().max(1000, "Description too long").optional(),
   tags: z.array(z.string()).default([]),
@@ -18,9 +16,7 @@ export const createMediaSchema = z.object({
 });
 
 export const updateMediaSchema = z.object({
-  category: z.nativeEnum(MediaCategory, {
-    errorMap: () => ({ message: "Invalid media category" })
-  }).optional(),
+  category: z.nativeEnum(MediaCategory).optional(),
   clientName: z.string().min(1, "Client name is required for client portfolio").optional(),
   description: z.string().max(1000, "Description too long").optional(),
   tags: z.array(z.string()).default([]).optional(),
@@ -49,6 +45,32 @@ export const mediaUploadSchema = z.object({
   message: "Client name is required when category is CLIENT_PORTFOLIO",
   path: ["clientName"]
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

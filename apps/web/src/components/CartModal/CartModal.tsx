@@ -188,3 +188,4 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onClose }) => {
 };
 
 export default CartModal;
+

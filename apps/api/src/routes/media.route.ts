@@ -10,13 +10,13 @@ import {
   getClientPortfolio,
   uploadMedia,
 } from "../controller/media.controller";
-import { upload } from "../utils/fileUpload";
+import { uploadMultiple, handleMulterError } from "../middleware";
 
 const router = Router();
 
 // Media CRUD routes
 router.post("/", createMedia);
-router.post("/upload", upload.array('files', 10), uploadMedia);
+router.post("/upload", uploadMultiple('files', 10), handleMulterError, uploadMedia);
 router.get("/", getAllMedia);
 router.get("/stats", getMediaStats);
 router.get("/category/:category", getMediaByCategory);

@@ -13,16 +13,9 @@ export class MediaService {
     return await prisma.media.create({
       data: {
         ...data,
+        title: data.title || data.originalName || 'Untitled',
+        type: data.type || 'IMAGE',
         tags: data.tags || [],
-      },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
       },
     });
   }
@@ -30,15 +23,6 @@ export class MediaService {
   async getMediaById(id: string) {
     const media = await prisma.media.findUnique({
       where: { id },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
     });
 
     if (!media) {
@@ -88,15 +72,6 @@ export class MediaService {
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
-        include: {
-          admin: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
-        },
       }),
       prisma.media.count({ where }),
     ]);
@@ -131,15 +106,6 @@ export class MediaService {
       data: {
         ...data,
         tags: data.tags || existingMedia.tags,
-      },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
       },
     });
   }
@@ -196,15 +162,6 @@ export class MediaService {
         isActive: true,
       },
       orderBy: { createdAt: 'desc' },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
     });
   }
 
@@ -219,18 +176,35 @@ export class MediaService {
         isActive: true,
       },
       orderBy: { createdAt: 'desc' },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
     });
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

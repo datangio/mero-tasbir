@@ -58,3 +58,18 @@ export type {
   PaginationData,
   SearchData,
 } from "./zodValidation";
+
+// Multer file upload middleware
+export {
+  uploadSingle,
+  uploadMultiple,
+  uploadFields,
+  uploadProfileImage,
+  uploadCourseImages,
+  uploadMarketplaceImages,
+  uploadEventImages,
+  uploadHeroImage,
+  uploadMixedFiles,
+  handleMulterError,
+  default as multerUpload,
+} from "./multer.config";

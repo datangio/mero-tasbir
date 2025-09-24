@@ -88,7 +88,14 @@ function createConfig(): AppConfig {
       env,
       corsOrigin: process.env.CORS_ORIGIN
         ? process.env.CORS_ORIGIN.split(",")
-        : ["http://localhost:3000", "http://localhost:5000"],
+        : [
+            "http://localhost:3000", 
+            "http://localhost:3001", 
+            "http://localhost:3002", 
+            "http://localhost:3003", 
+            "http://localhost:3004",
+            "http://localhost:5000"
+          ],
     },
     jwt: {
       secret:
@@ -120,3 +127,4 @@ export const { server, jwt } = config;
  * Provides TypeScript interfaces for configuration objects
  */
 export type { AppConfig, ServerConfig, JWTConfig };
+

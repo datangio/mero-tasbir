@@ -1,3 +1,4 @@
+
 /**
  * Event Management Service
  * Handles business logic for events, catering services, and equipment rental
@@ -104,9 +105,9 @@ export class EventService {
     if (city) where.city = { contains: city, mode: 'insensitive' };
 
     if (eventDateFrom || eventDateTo) {
-      where.eventDate = {};
-      if (eventDateFrom) where.eventDate.gte = new Date(eventDateFrom);
-      if (eventDateTo) where.eventDate.lte = new Date(eventDateTo);
+      (where as any).eventDate = {};
+      if (eventDateFrom) (where as any).eventDate.gte = new Date(eventDateFrom);
+      if (eventDateTo) (where as any).eventDate.lte = new Date(eventDateTo);
     }
 
     if (search) {
@@ -211,9 +212,9 @@ export class EventService {
     // Build where clause for date range
     const where: Record<string, unknown> = {};
     if (startDate || endDate) {
-      where.eventDate = {};
-      if (startDate) where.eventDate.gte = new Date(startDate);
-      if (endDate) where.eventDate.lte = new Date(endDate);
+      (where as any).eventDate = {};
+      if (startDate) (where as any).eventDate.gte = new Date(startDate);
+      if (endDate) (where as any).eventDate.lte = new Date(endDate);
     }
     if (eventType) where.eventType = eventType;
     if (status) where.status = status;
@@ -327,6 +328,7 @@ export class CateringServiceService {
     return await prisma.cateringService.create({
       data: {
         ...data,
+        price: Number(data.basePrice),
         basePrice: Number(data.basePrice)
       }
     });
@@ -417,15 +419,14 @@ export class EquipmentService {
     return await prisma.equipment.create({
       data: {
         ...data,
+        price: Number(data.dailyRentalPrice),
         dailyRentalPrice: Number(data.dailyRentalPrice),
         weeklyRentalPrice: data.weeklyRentalPrice ? Number(data.weeklyRentalPrice) : undefined,
         monthlyRentalPrice: data.monthlyRentalPrice ? Number(data.monthlyRentalPrice) : undefined,
         securityDeposit: data.securityDeposit ? Number(data.securityDeposit) : undefined,
         availableFrom: data.availableFrom ? new Date(data.availableFrom) : undefined,
-        availableTo: data.availableTo ? new Date(data.availableTo) : undefined,
         weight: data.weight ? Number(data.weight) : undefined,
-        lastMaintenance: data.lastMaintenance ? new Date(data.lastMaintenance) : undefined,
-        nextMaintenance: data.nextMaintenance ? new Date(data.nextMaintenance) : undefined
+        specifications: data.specifications ? data.specifications as any : undefined,
       }
     });
   }
@@ -497,15 +498,14 @@ export class EquipmentService {
       where: { id },
       data: {
         ...data,
+        price: data.dailyRentalPrice ? Number(data.dailyRentalPrice) : undefined,
         dailyRentalPrice: data.dailyRentalPrice ? Number(data.dailyRentalPrice) : undefined,
         weeklyRentalPrice: data.weeklyRentalPrice ? Number(data.weeklyRentalPrice) : undefined,
         monthlyRentalPrice: data.monthlyRentalPrice ? Number(data.monthlyRentalPrice) : undefined,
         securityDeposit: data.securityDeposit ? Number(data.securityDeposit) : undefined,
         availableFrom: data.availableFrom ? new Date(data.availableFrom) : undefined,
-        availableTo: data.availableTo ? new Date(data.availableTo) : undefined,
         weight: data.weight ? Number(data.weight) : undefined,
-        lastMaintenance: data.lastMaintenance ? new Date(data.lastMaintenance) : undefined,
-        nextMaintenance: data.nextMaintenance ? new Date(data.nextMaintenance) : undefined
+        specifications: data.specifications ? data.specifications as any : undefined,
       }
     });
   }
@@ -617,6 +617,10 @@ export class EventEquipmentRentalService {
     return await prisma.eventEquipmentRental.create({
       data: {
         ...data,
+        quantity: data.quantity || 1,
+        unitPrice: dailyRate,
+        startDate: rentalStartDate,
+        endDate: rentalEndDate,
         rentalStartDate,
         rentalEndDate,
         rentalDays,
@@ -643,7 +647,7 @@ export class EventEquipmentRentalService {
       if (rental) {
         const rentalStartDate = data.rentalStartDate ? new Date(data.rentalStartDate) : rental.rentalStartDate;
         const rentalEndDate = data.rentalEndDate ? new Date(data.rentalEndDate) : rental.rentalEndDate;
-        const rentalDays = Math.ceil((rentalEndDate.getTime() - rentalStartDate.getTime()) / (1000 * 60 * 60 * 24));
+        const rentalDays = rentalEndDate && rentalStartDate ? Math.ceil((rentalEndDate.getTime() - rentalStartDate.getTime()) / (1000 * 60 * 60 * 24)) : 0;
         const dailyRate = Number(rental.equipment.dailyRentalPrice);
         const totalPrice = dailyRate * rentalDays;
 

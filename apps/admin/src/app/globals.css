@@ -1,3 +1,53 @@
 @import "tailwindcss";
 @import "@repo/tailwind-config";
 @import "@repo/ui/styles.css";
+
+
+@font-face {
+    font-family: "title-regular";
+    src: url("/font/title-regular.f7f2da3f7d1f78b3f788.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "national-park";
+    src: url("/font/NationalPark-VariableVF.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "ballmain-regular";
+    src: url("/font/ballmain.regular.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  
+  .title-regular {
+    font-family: "title-regular";
+  }
+  
+  .national-park {
+    font-family: "national-park";
+  }
+  
+  .ballmain-regular {
+    font-family: "ballmain-regular";
+  }
+
+  body{
+    font-family: "title-regular";
+  }
+
+  /* Hide scrollbar but keep scrolling functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
+  

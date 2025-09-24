@@ -403,16 +403,16 @@ export default function Navbar() {
             >
               <div className="space-y-1">
               {[
-                "Home",
-                "Marketplace",
-                "For Freelancer",
-                "Career",
-                "Contact Us",
-                "Learning Hub",
+                { label: "Home", href: "/" },
+                { label: "Marketplace", href: "/marketplace" },
+                { label: "For Freelancer", href: "/freelancer" },
+                { label: "Career", href: "/career" },
+                { label: "Contact Us", href: "/contact" },
+                { label: "Learning Hub", href: "/course" },
                 ].map((item, index) => (
                   <motion.a
-                  key={item}
-                  href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
+                  key={item.label}
+                  href={item.href}
                     className="block rounded-md px-3 py-3 text-lg font-medium text-black hover:bg-gray-100 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   style={{ color: '#000000' }}
                   role="menuitem"
@@ -420,7 +420,7 @@ export default function Navbar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: 0.2 + index * 0.1, ease: "easeOut" }}
                 >
-                  {item}
+                  {item.label}
                   </motion.a>
               ))}
               </div>
@@ -435,7 +435,7 @@ export default function Navbar() {
                   <div className="text-lg font-medium text-black mb-2">Service</div>
                 <div className="ml-4 space-y-1">
                   <motion.a
-                    href="/services/photography"
+                    href="/booking"
                       className="block rounded-md px-3 py-3 text-base text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
                     style={{ color: '#000000' }}
                     initial={{ opacity: 0, x: -20 }}
@@ -445,7 +445,7 @@ export default function Navbar() {
                     Photography
                   </motion.a>
                   <motion.a
-                    href="/services/events"
+                    href="/events"
                       className="block rounded-md px-3 py-3 text-base text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
                     style={{ color: '#000000' }}
                     initial={{ opacity: 0, x: -20 }}

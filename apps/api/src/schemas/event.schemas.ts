@@ -1,16 +1,56 @@
+
 /**
  * Zod validation schemas for Event Management System
  * Provides type-safe validation for all event-related API endpoints
  */
 
 import { z } from 'zod';
-import { 
-  EventType, 
-  EventStatus, 
-  EquipmentCategory, 
-  EquipmentStatus, 
-  CateringCategory 
-} from '../generated/prisma';
+
+// Define enums directly instead of importing from Prisma
+const EventType = {
+  WEDDING: 'WEDDING',
+  CORPORATE: 'CORPORATE',
+  BIRTHDAY: 'BIRTHDAY',
+  ANNIVERSARY: 'ANNIVERSARY',
+  CONFERENCE: 'CONFERENCE',
+  PARTY: 'PARTY',
+  OTHER: 'OTHER'
+} as const;
+
+const EventStatus = {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+} as const;
+
+const EquipmentCategory = {
+  PHOTOGRAPHY: 'PHOTOGRAPHY',
+  VIDEOGRAPHY: 'VIDEOGRAPHY',
+  LIGHTING: 'LIGHTING',
+  AUDIO: 'AUDIO',
+  STAGING: 'STAGING',
+  DECORATION: 'DECORATION',
+  OTHER: 'OTHER'
+} as const;
+
+const EquipmentStatus = {
+  AVAILABLE: 'AVAILABLE',
+  RENTED: 'RENTED',
+  MAINTENANCE: 'MAINTENANCE',
+  OUT_OF_ORDER: 'OUT_OF_ORDER'
+} as const;
+
+const CateringCategory = {
+  APPETIZERS: 'APPETIZERS',
+  MAIN_COURSE: 'MAIN_COURSE',
+  DESSERTS: 'DESSERTS',
+  BEVERAGES: 'BEVERAGES',
+  SNACKS: 'SNACKS',
+  SPECIAL_DIETARY: 'SPECIAL_DIETARY'
+} as const;
 
 // Common validation schemas
 const cuidSchema = z.string().cuid();
@@ -91,7 +131,6 @@ export const createCateringServiceSchema = z.object({
 export const updateCateringServiceSchema = createCateringServiceSchema.partial().extend({
   isActive: z.boolean().optional(),
 });
-
 export const cateringServiceQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
@@ -110,7 +149,7 @@ export const createEquipmentSchema = z.object({
   brand: z.string().max(100, 'Brand name too long').optional(),
   model: z.string().max(100, 'Model name too long').optional(),
   serialNumber: z.string().max(100, 'Serial number too long').optional(),
-  specifications: z.record(z.unknown()).optional(),
+  specifications: z.record(z.string(), z.unknown()).optional(),
   dailyRentalPrice: decimalSchema,
   weeklyRentalPrice: decimalSchema.optional(),
   monthlyRentalPrice: decimalSchema.optional(),
@@ -228,5 +267,6 @@ export const eventStatsQuerySchema = z.object({
   eventType: z.nativeEnum(EventType).optional(),
   status: z.nativeEnum(EventStatus).optional(),
 });
+
 
 

@@ -11,6 +11,8 @@ import morgan from "morgan";
 import healthRoutes from "./routes/health";
 import v1Routes from "./routes/v1";
 import adminRoutes from "./routes/admin.route";
+import heroRoutes from "./routes/hero.route";
+import eventRoutes from "./routes/event.routes";
 import { config } from "./config";
 
 import {
@@ -43,6 +45,9 @@ const httpServer = createServer(app);
 // Serve static files for Swagger styling
 app.use(express.static(path.join(__dirname, "public")));
 
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, "../uploads")));
+
 /**
  * Security and middleware configuration
  * - Helmet: Security headers
@@ -54,13 +59,18 @@ app.use(express.static(path.join(__dirname, "public")));
  * - Compression: Response optimization
  * - Validation: Input sanitization
  */
-app.use(helmet());
+// CORS must be before helmet to avoid conflicts
+console.log('CORS Origins:', config.server.corsOrigin);
 app.use(
   cors({
     origin: config.server.corsOrigin,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    optionsSuccessStatus: 200
   })
 );
+app.use(helmet());
 app.use(morgan(config.isDevelopment ? "dev" : "combined"));
 
 // Security middleware
@@ -89,6 +99,8 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use("/api/v1/health", healthRoutes);
 app.use("/api/v1", v1Routes);
 app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/hero", heroRoutes);
+app.use("/api/v1/event", eventRoutes);
 
 // Swagger documentation at /docs
 app.use(
@@ -128,3 +140,4 @@ app.use((err: Error, req: Request, res: Response) => {
 });
 
 export default httpServer;
+

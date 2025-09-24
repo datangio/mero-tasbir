@@ -148,3 +148,9 @@ export interface AdminHardDeleteResponse {
   /** ID of the deleted admin */
   adminId: string;
 }
+
+// Re-export all types from other type files
+export * from "./event.types";
+export * from "./media.types";
+export * from "./hero.types";
+export * from "./auth.types";

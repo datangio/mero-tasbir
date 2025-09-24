@@ -1,5 +1,8 @@
 "use client";
 import { Toaster } from "react-hot-toast";
+// import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Loader2, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useAdminLogin } from "../hooks/useAdminLogin";
 
 export const AdminLogin = () => {
@@ -9,35 +12,13 @@ export const AdminLogin = () => {
     formState: { errors },
   } = form;
 
-  // Handle successful login
-  if (success) {
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-[#f8f7ff]">
-        <div className="min-w-sm w-full max-w-md rounded-lg bg-white p-12 text-center shadow-md">
-          <div className="mb-4 text-green-600">
-            <svg
-              className="mx-auto h-16 w-16"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-          <h2 className="mb-2 text-2xl font-bold text-gray-900">
-            Login Successful!
-          </h2>
-          <p className="mb-4 text-gray-600">
-            Welcome back, {success.admin.name}
-          </p>
-          <p className="text-sm text-gray-500">Redirecting to dashboard...</p>
-        </div>
-      </div>
-    );
-  }
+  // Handle successful login - redirect to dashboard immediately
+  useEffect(() => {
+    if (success) {
+      // Redirect to dashboard immediately after successful login
+      window.location.href = '/dashboard';
+    }
+  }, [success]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-[#f8f7ff]">
@@ -82,18 +63,21 @@ export const AdminLogin = () => {
             <label htmlFor="email" className="mb-2 block text-sm font-semibold">
               Email/Username
             </label>
-            <input
-              {...register("email")}
-              type="email"
-              id="email"
-              disabled={isLoading}
-              className={`sm:text-md mt-1 block w-full rounded-md border px-6 py-3 shadow-sm outline-none transition-colors focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 ${
-                errors.email
-                  ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-                  : "border-gray-300"
-              } ${isLoading ? "cursor-not-allowed bg-gray-50" : ""}`}
-              placeholder="Enter your email"
-            />
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+              <input
+                {...register("email")}
+                type="email"
+                id="email"
+                disabled={isLoading}
+                className={`sm:text-md block w-full rounded-md border pl-12 pr-6 py-3 shadow-sm outline-none transition-colors focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 ${
+                  errors.email
+                    ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
+                } ${isLoading ? "cursor-not-allowed bg-gray-50" : ""}`}
+                placeholder="Enter your email"
+              />
+            </div>
             {errors.email && (
               <p className="mt-1 text-sm text-red-600">
                 {errors.email.message}
@@ -101,11 +85,6 @@ export const AdminLogin = () => {
             )}
           </div>
 
-          <div className="mb-4 flex justify-end">
-            <a href="#" className="text-sm text-gray-500 hover:text-indigo-600">
-              Forgot password?
-            </a>
-          </div>
 
           <div className="mb-4">
             <label
@@ -114,23 +93,32 @@ export const AdminLogin = () => {
             >
               Password
             </label>
-            <input
-              {...register("password")}
-              type="password"
-              id="password"
-              disabled={isLoading}
-              className={`sm:text-md mt-1 block w-full rounded-md border px-6 py-3 shadow-sm outline-none transition-colors focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 ${
-                errors.password
-                  ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-                  : "border-gray-300"
-              } ${isLoading ? "cursor-not-allowed bg-gray-50" : ""}`}
-              placeholder="Enter your password"
-            />
+            <div className="relative">
+              <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+              <input
+                {...register("password")}
+                type="password"
+                id="password"
+                disabled={isLoading}
+                className={`sm:text-md block w-full rounded-md border pl-12 pr-6 py-3 shadow-sm outline-none transition-colors focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 ${
+                  errors.password
+                    ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                    : "border-gray-300"
+                } ${isLoading ? "cursor-not-allowed bg-gray-50" : ""}`}
+                placeholder="Enter your password"
+              />
+            </div>
             {errors.password && (
               <p className="mt-1 text-sm text-red-600">
                 {errors.password.message}
               </p>
             )}
+          </div>
+
+          <div className="mb-4 flex justify-end">
+            <a href="#" className="text-sm text-gray-500 hover:text-indigo-600">
+              Forgot password?
+            </a>
           </div>
 
           <div className="mb-6">
@@ -147,34 +135,23 @@ export const AdminLogin = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full rounded-md px-4 py-3 font-medium transition-colors ${
+            className={`w-full rounded-md px-4 py-3 font-semibold text-lg transition-all duration-200 shadow-md ${
               isLoading
                 ? "cursor-not-allowed bg-gray-400 text-gray-200"
-                : "bg-indigo-600 text-white hover:bg-indigo-700"
+                : "bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-lg transform hover:scale-[1.02]"
             }`}
+            style={{
+              display: 'block',
+              visibility: 'visible',
+              opacity: 1,
+              minHeight: '52px',
+              border: 'none',
+              outline: 'none'
+            }}
           >
             {isLoading ? (
               <div className="flex items-center justify-center">
-                <svg
-                  className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
+                <Loader2 className="mr-3 h-5 w-5 animate-spin text-white" />
                 Signing in...
               </div>
             ) : (

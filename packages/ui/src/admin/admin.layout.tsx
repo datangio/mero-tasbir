@@ -1,3 +1,4 @@
+
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
@@ -13,17 +14,9 @@ export const AdminLayout: React.FC<LayoutProps> = ({
 }) => {
   return (
     <ErrorBoundary>
-      <SplitScreenAdmin
-        containerClassName="flex h-screen bg-gray-50"
-        leftClassName=""
-        rightClassName="flex-1"
-      >
-        <AdminSidebar />
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <AdminHeader title={pageTitle} breadcrumbs={breadcrumbs} />
-          <AdminMainContent>{children}</AdminMainContent>
-        </div>
-      </SplitScreenAdmin>
+      <div className="min-h-screen bg-gray-50">
+        <AdminMainContent>{children}</AdminMainContent>
+      </div>
     </ErrorBoundary>
   );
 };
@@ -115,15 +108,13 @@ interface AdminMainContentProps {
 }
 
 const AdminMainContent: React.FC<AdminMainContentProps> = ({ children }) => (
-  <main className="flex-1 overflow-auto bg-gray-50 p-6">
-    <div className="mx-auto max-w-7xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {children}
-      </motion.div>
-    </div>
+  <main className="min-h-screen bg-gray-50">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </motion.div>
   </main>
 );

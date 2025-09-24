@@ -25,6 +25,51 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
       { id: "jobs", name: "Jobs", path: "/jobs" },
     ],
   },
+  {
+    id: "courses",
+    name: "Courses",
+    icon: "🎓",
+    path: "/courses",
+  },
+  {
+    id: "content-management",
+    name: "Content Management",
+    icon: "📝",
+    path: "/content-management",
+    subItems: [
+      { 
+        id: "photography", 
+        name: "Photography", 
+        path: "/photography",
+        subItems: [
+          { id: "portfolio", name: "Portfolio", path: "/photography/portfolio", icon: "🖼️" },
+          { id: "gallery", name: "Gallery", path: "/photography/gallery", icon: "📷" },
+          { id: "faq", name: "FAQ", path: "/photography/faq", icon: "❓" },
+          { id: "about", name: "About", path: "/photography/about", icon: "ℹ️" },
+          { id: "categories", name: "Categories", path: "/photography/categories", icon: "🏷️" },
+          { 
+            id: "packages", 
+            name: "Packages", 
+            path: "/photography/packages",
+            icon: "📦",
+            subItems: [
+              { id: "wedding-packages", name: "Wedding", path: "/photography/packages/wedding", icon: "💒" },
+              { id: "other-packages", name: "Other", path: "/photography/packages/other", icon: "📸" },
+            ]
+          },
+        ]
+      },
+      { id: "event", name: "Event", path: "/event", icon: "🎉" },
+      { id: "videography", name: "Videography", path: "/videography", icon: "🎥" },
+      { id: "blog", name: "Blog", path: "/blog", icon: "📝" },
+    ],
+  },
+  {
+    id: "marketplace",
+    name: "Marketplace",
+    icon: "🛒",
+    path: "/marketplace",
+  },
 ];
 
 // Wedding Status Configuration
@@ -178,3 +223,4 @@ export const DEFAULT_VALUES = {
     limit: 10,
   },
 };
+

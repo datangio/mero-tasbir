@@ -22,7 +22,7 @@ export default function AuthPage() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [signUpStep, setSignUpStep] = useState(1); // 1: Email, 2: Email verification, 3: User details, 4: Password, 5: Account creation
   const [verificationCode, setVerificationCode] = useState('');
-  const [emailVerified] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
   const [userType, setUserType] = useState<'user' | 'freelancer' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 

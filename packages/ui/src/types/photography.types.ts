@@ -186,3 +186,20 @@ export interface PhotographyAnimationVariants {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

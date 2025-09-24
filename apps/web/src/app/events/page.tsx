@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
 export default function Events() {
-  const [activeSection] = useState('home');
+  const [activeSection, setActiveSection] = useState('home');
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [activeMenuCategory, setActiveMenuCategory] = useState('snacks');
 

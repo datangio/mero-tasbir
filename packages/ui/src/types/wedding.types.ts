@@ -37,11 +37,11 @@ export type BookingStep = 1 | 2.5 | 2.7 | 3;
 
 export interface AnimationVariants {
   [key: string]: {
-    initial?: Record<string, unknown>;
-    animate?: Record<string, unknown>;
-    exit?: Record<string, unknown>;
-    whileHover?: Record<string, unknown>;
-    whileTap?: Record<string, unknown>;
-    transition?: Record<string, unknown>;
+    initial?: any;
+    animate?: any;
+    exit?: any;
+    whileHover?: any;
+    whileTap?: any;
+    transition?: any;
   };
 }

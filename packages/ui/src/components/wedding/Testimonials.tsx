@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 interface Testimonial {
@@ -68,8 +70,25 @@ const testimonials: Testimonial[] = [
 
 export const Testimonials: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const itemsPerPage = 3;
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const totalPages = testimonials.length - itemsPerPage + 1;
+
+  // Update items per page based on screen size
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 1024) {
+        setItemsPerPage(1);
+      } else if (window.innerWidth < 1400) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(3);
+      }
+    };
+
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
 
   const nextPage = () => {
     setCurrentIndex(prev => (prev + 1) % totalPages);
@@ -81,15 +100,15 @@ export const Testimonials: React.FC = () => {
 
   return (
     <motion.div
-      className="w-full bg-gray-50 px-8 py-20"
+      className="w-full bg-gray-50 px-4 sm:px-8 py-12 sm:py-16 lg:py-20"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.5 }}
     >
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 flex items-center justify-between">
+        <div className="mb-8 sm:mb-12 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-0">
           <motion.h2
-            className="title-regular text-4xl font-bold text-gray-900 md:text-5xl"
+            className="title-regular text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center sm:text-left"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
@@ -101,10 +120,10 @@ export const Testimonials: React.FC = () => {
           <div className="flex items-center space-x-2">
             <button
               onClick={prevPage}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
+              className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
             >
               <svg
-                className="h-6 w-6 text-gray-600"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -120,10 +139,10 @@ export const Testimonials: React.FC = () => {
 
             <button
               onClick={nextPage}
-              className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
+              className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl"
             >
               <svg
-                className="h-6 w-6 text-gray-600"
+                className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -141,24 +160,26 @@ export const Testimonials: React.FC = () => {
 
         <div className="relative">
           {/* Testimonials Grid */}
-          <div className="overflow-hidden px-8">
+          <div className="overflow-hidden px-2 sm:px-4 lg:px-8">
             <motion.div
-              className="flex gap-6"
+              className="flex gap-4 sm:gap-6 lg:gap-8"
               animate={{ x: -currentIndex * (100 / itemsPerPage) + "%" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               {testimonials.map(testimonial => (
                 <motion.div
                   key={testimonial.id}
-                  className="flex-shrink-0 rounded-xl bg-white p-6 shadow-lg transition-all duration-300 hover:shadow-xl"
+                  className="flex-shrink-0 rounded-xl bg-white p-6 sm:p-8 lg:p-10 shadow-lg transition-all duration-300 hover:shadow-xl"
                   style={{
-                    width: `calc(${100 / itemsPerPage}% - ${(6 * 16) / itemsPerPage}px)`,
+                    width: `calc(${100 / itemsPerPage}% - ${(itemsPerPage === 1 ? 4 : itemsPerPage === 2 ? 6 : 8) * 16 / itemsPerPage}px)`,
+                    minWidth: itemsPerPage === 1 ? '90vw' : itemsPerPage === 2 ? '45vw' : '30vw',
+                    maxWidth: itemsPerPage === 1 ? '500px' : itemsPerPage === 2 ? '400px' : '350px',
                   }}
                   whileHover={{ y: -5 }}
                 >
-                  <div className="mb-4 flex items-start justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="h-12 w-12 overflow-hidden rounded-full">
+                  <div className="mb-5 sm:mb-6 flex items-start justify-between">
+                    <div className="flex items-center space-x-4 sm:space-x-5">
+                      <div className="h-16 w-16 sm:h-18 sm:w-18 overflow-hidden rounded-full">
                         <img
                           src={testimonial.profileImage}
                           alt={testimonial.name}
@@ -168,16 +189,16 @@ export const Testimonials: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900">
+                  <div className="mb-4 sm:mb-5">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
                       {testimonial.name}
                     </h3>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-base sm:text-lg text-gray-500">
                       {testimonial.handle}
                     </p>
                   </div>
 
-                  <p className="leading-relaxed text-gray-700">
+                  <p className="text-lg sm:text-xl leading-relaxed text-gray-700">
                     "{testimonial.testimonial}"
                   </p>
                 </motion.div>
@@ -186,8 +207,8 @@ export const Testimonials: React.FC = () => {
           </div>
 
           {/* Progress Bar */}
-          <div className="mt-8 flex justify-center">
-            <div className="h-1 w-32 overflow-hidden rounded-full bg-gray-200">
+          <div className="mt-6 sm:mt-8 flex justify-center">
+            <div className="h-1 w-24 sm:w-32 overflow-hidden rounded-full bg-gray-200">
               <motion.div
                 className="h-full rounded-full bg-orange-500"
                 initial={{ width: "0%" }}

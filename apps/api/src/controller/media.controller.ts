@@ -179,10 +179,11 @@ export const getMediaByCategory = asyncHandler(async (req: Request, res: Respons
     const { category } = req.params;
     
     if (!Object.values(MediaCategory).includes(category as MediaCategory)) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "Invalid media category",
       });
+      return;
     }
     
     const media = await mediaService.getMediaByCategory(category as MediaCategory);
@@ -226,10 +227,11 @@ export const uploadMedia = asyncHandler(async (req: Request, res: Response) => {
     const files = req.files as Express.Multer.File[];
     
     if (!files || files.length === 0) {
-      return res.status(400).json({
+      res.status(400).json({
         success: false,
         message: "No files uploaded",
       });
+      return;
     }
 
     const uploadedMedia = [];
@@ -246,7 +248,7 @@ export const uploadMedia = asyncHandler(async (req: Request, res: Response) => {
         clientName: validatedData.clientName,
         description: validatedData.description,
         tags: validatedData.tags || [],
-        uploadedBy: req.user?.id, // Assuming user is attached to request
+        uploadedBy: (req as any).user?.id, // Assuming user is attached to request
       };
 
       const media = await mediaService.createMedia(mediaData);

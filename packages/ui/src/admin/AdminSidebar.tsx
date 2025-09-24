@@ -1,6 +1,7 @@
+
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { NavigationItem } from "../types/admin.types";
 import {
@@ -269,25 +270,103 @@ const NavigationItem: React.FC<NavigationItemProps> = ({
       >
         <div className="ml-6 mt-1 space-y-1">
           {item.subItems.map(subItem => (
-            <motion.button
+            <NavigationSubItem
               key={subItem.id}
-              className={`
-                w-full cursor-pointer rounded-lg p-2 text-left 
-                transition-colors duration-200 hover:bg-gray-100
-                ${isActive ? "border-l-2 border-blue-400 bg-blue-50" : ""}
-              `}
-              onClick={() => onNavigate(subItem.name, subItem.path)}
-              whileHover={{ scale: 1.02, x: 4 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="text-sm text-gray-600">{subItem.name}</span>
-            </motion.button>
+              item={subItem}
+              isActive={isActive}
+              onNavigate={onNavigate}
+            />
           ))}
         </div>
       </motion.div>
     )}
   </div>
 );
+
+interface NavigationSubItemProps {
+  item: import('../types/admin.types').NavigationSubItem;
+  isActive: boolean;
+  onNavigate: (pageName: string, path?: string) => void;
+}
+
+const NavigationSubItem: React.FC<NavigationSubItemProps> = ({
+  item,
+  isActive,
+  onNavigate,
+}) => {
+  const [isSubExpanded, setIsSubExpanded] = useState(false);
+
+  return (
+    <div>
+      <motion.button
+        className={`
+          flex w-full cursor-pointer items-center justify-between rounded-lg p-2 
+          transition-colors duration-200 hover:bg-gray-100
+          ${isActive ? "border-l-2 border-blue-400 bg-blue-50" : ""}
+        `}
+        onClick={() => {
+          if (item.subItems) {
+            setIsSubExpanded(!isSubExpanded);
+          } else {
+            onNavigate(item.name, item.path);
+          }
+        }}
+        whileHover={{ scale: 1.02, x: 4 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <div className="flex items-center space-x-2">
+          {item.icon && <span className="text-sm">{item.icon}</span>}
+          <span className="text-sm text-gray-600">{item.name}</span>
+        </div>
+
+        {item.subItems && (
+          <motion.svg
+            className="h-3 w-3 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            animate={{ rotate: isSubExpanded ? 90 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </motion.svg>
+        )}
+      </motion.button>
+
+      {item.subItems && (
+        <motion.div
+          variants={ANIMATION_VARIANTS.submenu}
+          animate={isSubExpanded ? "open" : "closed"}
+          className="overflow-hidden"
+        >
+          <div className="ml-4 mt-1 space-y-1">
+            {item.subItems.map((subSubItem: import('../types/admin.types').NavigationSubItem) => (
+              <motion.button
+                key={subSubItem.id}
+                className={`
+                  flex w-full cursor-pointer items-center space-x-2 rounded-lg p-2 text-left 
+                  transition-colors duration-200 hover:bg-gray-100
+                  ${isActive ? "border-l-2 border-blue-300 bg-blue-25" : ""}
+                `}
+                onClick={() => onNavigate(subSubItem.name, subSubItem.path)}
+                whileHover={{ scale: 1.02, x: 4 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {subSubItem.icon && <span className="text-xs">{subSubItem.icon}</span>}
+                <span className="text-xs text-gray-500">{subSubItem.name}</span>
+              </motion.button>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+};
 
 interface SidebarFooterProps {
   isCollapsed: boolean;

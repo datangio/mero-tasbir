@@ -119,6 +119,7 @@ async function seedEventData() {
           name: 'Traditional Nepali Thali',
           description: 'Authentic Nepali thali with dal, bhat, tarkari, and achar',
           category: CateringCategory.FOOD,
+          price: 500,
           basePrice: 500,
           pricePerPerson: 500,
           minOrderQuantity: 10,
@@ -138,6 +139,7 @@ async function seedEventData() {
           name: 'Continental Buffet',
           description: 'International buffet with salads, main courses, and desserts',
           category: CateringCategory.FOOD,
+          price: 800,
           basePrice: 800,
           pricePerPerson: 800,
           minOrderQuantity: 20,
@@ -157,6 +159,7 @@ async function seedEventData() {
           name: 'Fresh Juice Bar',
           description: 'Fresh fruit juices and mocktails',
           category: CateringCategory.BEVERAGE,
+          price: 200,
           basePrice: 200,
           pricePerPerson: 200,
           minOrderQuantity: 5,
@@ -176,6 +179,7 @@ async function seedEventData() {
           name: 'Wedding Cake',
           description: 'Custom designed wedding cake with multiple tiers',
           category: CateringCategory.DESSERT,
+          price: 3000,
           basePrice: 3000,
           pricePerPerson: 50,
           minOrderQuantity: 1,
@@ -204,6 +208,7 @@ async function seedEventData() {
           description: 'High-quality PA system with microphones and speakers',
           category: EquipmentCategory.SOUND_SYSTEM,
           status: EquipmentStatus.AVAILABLE,
+          price: 2000,
           brand: 'JBL',
           model: 'EON615',
           serialNumber: 'JBL-EON615-001',
@@ -222,9 +227,6 @@ async function seedEventData() {
           weight: 15.5,
           color: 'Black',
           condition: 'excellent',
-          images: ['https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800'],
-          adminNotes: 'Most popular sound system',
-          maintenanceNotes: 'Regularly serviced, excellent condition'
         }
       }),
       prisma.equipment.create({
@@ -233,6 +235,7 @@ async function seedEventData() {
           description: 'Professional LED stage lighting with controller',
           category: EquipmentCategory.LIGHTING,
           status: EquipmentStatus.AVAILABLE,
+          price: 1500,
           brand: 'Chauvet',
           model: 'DJ Intimidator Spot 355',
           serialNumber: 'CH-DJ-355-002',
@@ -251,9 +254,6 @@ async function seedEventData() {
           weight: 8.2,
           color: 'Black',
           condition: 'excellent',
-          images: ['https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800'],
-          adminNotes: 'Great for parties and events',
-          maintenanceNotes: 'Recently updated firmware'
         }
       }),
       prisma.equipment.create({
@@ -262,6 +262,7 @@ async function seedEventData() {
           description: 'Elegant round dining tables for 8-10 people',
           category: EquipmentCategory.FURNITURE,
           status: EquipmentStatus.AVAILABLE,
+          price: 500,
           brand: 'Custom',
           model: 'Round-8ft',
           specifications: {
@@ -279,9 +280,6 @@ async function seedEventData() {
           weight: 45,
           color: 'Brown',
           condition: 'good',
-          images: ['https://images.unsplash.com/photo-1551218808-94e220e084d2?w=800'],
-          adminNotes: 'Popular for wedding receptions',
-          maintenanceNotes: 'Regular polishing and maintenance'
         }
       }),
       prisma.equipment.create({
@@ -290,6 +288,7 @@ async function seedEventData() {
           description: 'High-quality photography backdrop with stand',
           category: EquipmentCategory.DECORATION,
           status: EquipmentStatus.AVAILABLE,
+          price: 300,
           brand: 'Savage',
           model: 'Seamless Paper',
           specifications: {
@@ -307,9 +306,6 @@ async function seedEventData() {
           weight: 5,
           color: 'White',
           condition: 'excellent',
-          images: ['https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=800'],
-          adminNotes: 'Essential for professional photography',
-          maintenanceNotes: 'Handle with care, avoid creases'
         }
       }),
       prisma.equipment.create({
@@ -318,6 +314,7 @@ async function seedEventData() {
           description: 'Professional espresso machine for events',
           category: EquipmentCategory.KITCHEN,
           status: EquipmentStatus.AVAILABLE,
+          price: 1000,
           brand: 'La Marzocco',
           model: 'Linea Mini',
           serialNumber: 'LM-LINEA-003',
@@ -336,9 +333,6 @@ async function seedEventData() {
           weight: 25,
           color: 'Stainless Steel',
           condition: 'excellent',
-          images: ['https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800'],
-          adminNotes: 'Premium coffee service',
-          maintenanceNotes: 'Regular descaling and cleaning required'
         }
       })
     ]);
@@ -410,6 +404,10 @@ async function seedEventData() {
         data: {
           eventId: events[0].id,
           equipmentId: equipment[0].id,
+          quantity: 1,
+          unitPrice: 2000,
+          startDate: new Date('2024-06-14'),
+          endDate: new Date('2024-06-16'),
           rentalStartDate: new Date('2024-06-14'),
           rentalEndDate: new Date('2024-06-16'),
           rentalDays: 2,
@@ -427,6 +425,10 @@ async function seedEventData() {
         data: {
           eventId: events[0].id,
           equipmentId: equipment[1].id,
+          quantity: 1,
+          unitPrice: 1500,
+          startDate: new Date('2024-06-14'),
+          endDate: new Date('2024-06-16'),
           rentalStartDate: new Date('2024-06-14'),
           rentalEndDate: new Date('2024-06-16'),
           rentalDays: 2,
@@ -444,11 +446,15 @@ async function seedEventData() {
         data: {
           eventId: events[0].id,
           equipmentId: equipment[2].id,
+          quantity: 20,
+          unitPrice: 500,
+          startDate: new Date('2024-06-15'),
+          endDate: new Date('2024-06-15'),
           rentalStartDate: new Date('2024-06-15'),
           rentalEndDate: new Date('2024-06-15'),
           rentalDays: 1,
           dailyRate: 500,
-          totalPrice: 500,
+          totalPrice: 10000,
           securityDeposit: 1000,
           status: 'CONFIRMED',
           deliveryAddress: 'Hotel Yak & Yeti, Durbar Marg, Kathmandu',
@@ -461,6 +467,10 @@ async function seedEventData() {
         data: {
           eventId: events[1].id,
           equipmentId: equipment[0].id,
+          quantity: 1,
+          unitPrice: 2000,
+          startDate: new Date('2024-07-20'),
+          endDate: new Date('2024-07-20'),
           rentalStartDate: new Date('2024-07-20'),
           rentalEndDate: new Date('2024-07-20'),
           rentalDays: 1,
@@ -507,6 +517,21 @@ if (require.main === module) {
 }
 
 export default seedEventData;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

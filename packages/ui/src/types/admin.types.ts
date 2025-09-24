@@ -54,6 +54,7 @@ export interface NavigationSubItem {
   name: string;
   path: string;
   icon?: string;
+  subItems?: NavigationSubItem[];
 }
 
 // UI State types
@@ -71,7 +72,7 @@ export interface FormState<T> {
 }
 
 // Animation types - imported from wedding.types.ts
-export { AnimationVariants } from "./wedding.types";
+export type { AnimationVariants } from "./wedding.types";
 
 // API Response types
 export interface ApiResponse<T> {
