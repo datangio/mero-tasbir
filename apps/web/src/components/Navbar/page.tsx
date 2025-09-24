@@ -52,7 +52,7 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center">
           {/* Mobile Hamburger Menu Button - Left Side */}
           <div className="lg:hidden flex items-center mr-2">
@@ -71,9 +71,9 @@ export default function Navbar() {
             <Image
               src="/images/MeroTasbir-logo.png"
               alt="Mero Tasbir Logo"
-              width={100}
-              height={100}
-              className="h-32 w-32"
+              width={120}
+              height={120}
+              className="h-24 w-24 lg:h-28 lg:w-28"
             />
           </div>
 
@@ -81,7 +81,7 @@ export default function Navbar() {
           <div className="flex-1"></div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex space-x-4 text-black">
+          <div className="hidden nav-item space-x-5 xl:space-xl-3 text-black">
             {[
               { label: "Home", href: "/" },
               { label: "Marketplace", href: "/marketplace" },
@@ -92,7 +92,7 @@ export default function Navbar() {
               <a
                 key={item.href}
                 href={item.href}
-                className="px-3 py-2 text-base font-medium text-black transition-colors hover:opacity-80"
+                className="px-2 py-2 text-sm xl:text-base font-medium text-black transition-colors hover:opacity-80 whitespace-nowrap"
                 onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
                 onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
               >
@@ -111,7 +111,7 @@ export default function Navbar() {
               aria-expanded={isServiceOpen}
             >
               <button
-                className={`px-3 py-2 text-base font-medium transition-colors ${
+                className={`px-2 py-2 text-sm xl:text-base font-medium transition-colors whitespace-nowrap ${
                   isServiceOpen ? "" : "text-black"
                 }`}
                 style={{ color: isServiceOpen ? '#FB7F33' : '#000000' }}
@@ -131,7 +131,7 @@ export default function Navbar() {
               >
                 <div className="py-2 min-w-[200px]">
                   <a
-                    href="/services/photography"
+                    href="/booking"
                     className="block px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
                     onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
                     onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
@@ -139,7 +139,7 @@ export default function Navbar() {
                     Photography
                   </a>
                   <a
-                    href="/services/events"
+                    href="/events"
                     className="block px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
                     onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
                     onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
@@ -161,7 +161,7 @@ export default function Navbar() {
               aria-expanded={isLearningHubOpen}
             >
               <button
-                className={`px-3 py-2 text-base font-medium transition-colors ${
+                className={`px-2 py-2 text-sm xl:text-base font-medium transition-colors whitespace-nowrap ${
                   isLearningHubOpen ? "" : "text-black"
                 }`}
                 style={{ color: isLearningHubOpen ? '#FB7F33' : '#000000' }}
@@ -257,7 +257,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Icons & CTA */}
-          <div className="hidden lg:flex items-center space-x-3">
+          <div className="hidden nav-item items-center space-x-2 xl:space-x-3 ml-6">
               <button
                 onClick={() => setIsCartOpen(true)}
                 aria-label="Shopping Cart"
@@ -288,7 +288,7 @@ export default function Navbar() {
               </a>
 
               <button
-                className="rounded-full bg-orange-500 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                className="rounded-full bg-orange-500 px-3 py-2 text-sm xl:text-base font-medium text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 whitespace-nowrap"
                 aria-label="Get Rented"
               >
                 Get Rented
@@ -365,9 +365,9 @@ export default function Navbar() {
                 <Image
                   src="/images/MeroTasbir-logo.png"
                   alt="Mero Tasbir Logo"
-                  width={100}
-                  height={100}
-                  className="h-20 w-20"
+                  width={120}
+                  height={120}
+                  className="h-24 w-24"
                 />
               </div>
               

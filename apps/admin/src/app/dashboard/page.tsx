@@ -2645,7 +2645,8 @@ export default function DashboardPage() {
       subtitle: "",
       description: "",
       mediaType: "image",
-      mediaUrl: ""
+      mediaUrl: "",
+      isActive: false
     });
     setShowContentModal(true);
     // Small delay to ensure the modal starts off-screen
@@ -2663,7 +2664,8 @@ export default function DashboardPage() {
         subtitle: "",
         description: "",
         mediaType: "image",
-        mediaUrl: ""
+        mediaUrl: "",
+        isActive: false
       });
     }, 300); // Match the transition duration
   };

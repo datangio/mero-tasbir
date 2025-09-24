@@ -7,6 +7,10 @@
   .hamburger-menu {
     display: none !important;
   }
+
+  .nav-item{
+    display:flex !important;
+  }
   
   /* Hide mobile navigation icons on large screens */
   .mobile-nav-icons {

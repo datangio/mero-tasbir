@@ -314,10 +314,10 @@ export default function AuthPage() {
  
 
   return (
-    <div className="h-[calc(100vh-150px)] bg-white overflow-y-auto">
-      <div className="flex h-full">
+    <div className="min-h-screen bg-white overflow-y-auto">
+      <div className="flex flex-col lg:flex-row h-full">
         {/* Left Side - Image (Hidden on mobile, visible on large screens) */}
-        <div className="hidden lg:flex lg:w-[30%] relative">
+        <div className="hidden lg:flex lg:w-[40%] xl:w-[35%] relative">
           <Image
             src="/images/photography.jpg"
             alt="Professional Photography"
@@ -328,27 +328,27 @@ export default function AuthPage() {
         </div>
 
         {/* Right Side - Auth Form */}
-        <div className="flex-1 flex py-6 px-4 sm:px-6 lg:px-8 bg-white overflow-y-auto">
+        <div className="flex-1 flex flex-col py-4 sm:py-6 px-4 sm:px-6 lg:px-8 bg-white overflow-y-auto">
           {/* Back to Home - Top */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
-            className="mt-5"
+            className="mt-2 sm:mt-4 lg:mt-6"
           >
             <Link 
               href="/" 
-              className="inline-flex items-center text-sm text-orange-500 hover:text-orange-600 transition-colors  mb-4"
+              className="inline-flex items-center text-xs sm:text-sm text-orange-500 hover:text-orange-600 transition-colors mb-2 sm:mb-4"
             >
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               Back to Home
             </Link>
           </motion.div>
 
-          <div className="flex-1 flex items-center justify-center py-2">
-            <div className="max-w-md w-full">
+          <div className="flex-1 flex items-center justify-center py-2 sm:py-4">
+            <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -356,14 +356,14 @@ export default function AuthPage() {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h2 className="text-3xl font-bold text-black">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-black">
             {isSignUp ? (
               signUpStep === 1 ? 'Create Your Account' :
               signUpStep === 2 ? 'Verify Your Email' :
               'Choose Your Account Type'
             ) : 'Welcome Back'}
           </h2>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2 text-sm sm:text-base text-gray-600">
             {isSignUp ? (
               signUpStep === 1 ? 'Join Mero Tasbir to access premium photography services' :
               signUpStep === 2 ? `We've sent a verification code to ${watch('email')}` :
@@ -373,12 +373,12 @@ export default function AuthPage() {
           
           {/* Step Indicator for Sign Up */}
           {isSignUp && (
-            <div className="mt-6 flex justify-center">
-              <div className="flex space-x-2">
+            <div className="mt-4 sm:mt-6 flex justify-center">
+              <div className="flex space-x-1 sm:space-x-2">
                 {[1, 2, 3, 4, 5].map((step) => (
                   <div
                     key={step}
-                    className={`w-3 h-3 rounded-full transition-colors ${
+                    className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-colors ${
                       step <= signUpStep ? 'bg-orange-500' : 'bg-gray-300'
                     }`}
                   />
@@ -393,18 +393,18 @@ export default function AuthPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-2xl shadow-xl p-8"
+          className="bg-white rounded-xl sm:rounded-2xl shadow-lg sm:shadow-xl p-4 sm:p-6 lg:p-8"
         >
           {/* Google Sign In Button - Only show on step 1 */}
           {(!isSignUp || signUpStep === 1) && (
             <>
               <motion.button
                 onClick={handleGoogleAuth}
-                className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-300 mb-6"
+                className="w-full flex items-center justify-center px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg sm:rounded-xl text-sm sm:text-base text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-300 mb-4 sm:mb-6"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                   <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -414,11 +414,11 @@ export default function AuthPage() {
               </motion.button>
 
               {/* Divider */}
-              <div className="relative mb-6">
+              <div className="relative mb-4 sm:mb-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300" />
                 </div>
-                <div className="relative flex justify-center text-sm">
+                <div className="relative flex justify-center text-xs sm:text-sm">
                   <span className="px-2 bg-white text-gray-500">Or continue with email</span>
                 </div>
               </div>
@@ -428,9 +428,9 @@ export default function AuthPage() {
           {/* Form Content Based on Step */}
           {isSignUp && signUpStep === 1 ? (
             /* Step 1: Email Input */
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Email Address
                 </label>
                 <input
@@ -442,18 +442,18 @@ export default function AuthPage() {
                     }
                   })}
                   type="email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
                   placeholder="Enter your email"
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.email.message}</p>
                 )}
               </div>
 
               <motion.button
                 onClick={handleStepContinue}
                 disabled={isLoading}
-                className={`w-full py-3 px-4 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg ${
+                className={`w-full py-2 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-lg ${
                   isLoading 
                     ? 'bg-orange-400 cursor-not-allowed' 
                     : 'bg-orange-500 hover:bg-orange-600'
@@ -469,20 +469,20 @@ export default function AuthPage() {
             </div>
           ) : isSignUp && signUpStep === 2 ? (
             /* Step 2: Email Verification */
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-600 mb-6">
+                <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">
                   Enter the 6-digit code we sent to your email address
                 </p>
               </div>
               
               <div>
-                <label htmlFor="verificationCode" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="verificationCode" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Verification Code
                 </label>
                 <input
@@ -491,7 +491,7 @@ export default function AuthPage() {
                   maxLength={6}
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-center text-2xl tracking-widest text-black"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-center text-lg sm:text-2xl tracking-widest text-black"
                   placeholder="123456"
                 />
               </div>
@@ -501,7 +501,7 @@ export default function AuthPage() {
                   type="button"
                   onClick={resendVerificationCode}
                   disabled={isLoading}
-                  className={`text-sm ${
+                  className={`text-xs sm:text-sm ${
                     isLoading 
                       ? 'text-gray-400 cursor-not-allowed' 
                       : 'text-orange-500 hover:text-orange-600'
@@ -514,7 +514,7 @@ export default function AuthPage() {
               <motion.button
                 onClick={handleStepContinue}
                 disabled={isLoading}
-                className={`w-full py-3 px-4 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg ${
+                className={`w-full py-2 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-lg ${
                   isLoading 
                     ? 'bg-orange-400 cursor-not-allowed' 
                     : 'bg-orange-500 hover:bg-orange-600'
@@ -530,20 +530,20 @@ export default function AuthPage() {
             </div>
           ) : isSignUp && signUpStep === 3 ? (
             /* Step 3: User Details (Username, Full Name, Address) */
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-600 mb-6">
+                <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">
                   Tell us a bit about yourself
                 </p>
               </div>
 
               <div>
-                <label htmlFor="username" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="username" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Username
                 </label>
                 <input
@@ -552,16 +552,16 @@ export default function AuthPage() {
                     minLength: { value: 3, message: 'Username must be at least 3 characters' }
                   })}
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
                   placeholder="Choose a username"
                 />
                 {errors.username && (
-                  <p className="mt-1 text-sm text-red-600">{errors.username.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.username.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="fullName" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Full Name
                 </label>
                 <input
@@ -570,16 +570,16 @@ export default function AuthPage() {
                     minLength: { value: 2, message: 'Full name must be at least 2 characters' }
                   })}
                   type="text"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
                   placeholder="Enter your full name"
                 />
                 {errors.fullName && (
-                  <p className="mt-1 text-sm text-red-600">{errors.fullName.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.fullName.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="address" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Address
                 </label>
                 <textarea
@@ -588,18 +588,18 @@ export default function AuthPage() {
                     minLength: { value: 10, message: 'Please provide a complete address' }
                   })}
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black resize-none"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black resize-none"
                   placeholder="Enter your address"
                 />
                 {errors.address && (
-                  <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.address.message}</p>
                 )}
               </div>
 
               <motion.button
                 onClick={handleStepContinue}
                 disabled={isLoading}
-                className={`w-full py-3 px-4 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg ${
+                className={`w-full py-2 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-lg ${
                   isLoading 
                     ? 'bg-orange-400 cursor-not-allowed' 
                     : 'bg-orange-500 hover:bg-orange-600'
@@ -615,20 +615,20 @@ export default function AuthPage() {
             </div>
           ) : isSignUp && signUpStep === 4 ? (
             /* Step 4: Password Setup */
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-600 mb-6">
+                <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">
                   Create a secure password for your account
                 </p>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="password" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Password
                 </label>
                 <input
@@ -637,16 +637,16 @@ export default function AuthPage() {
                     minLength: { value: 8, message: 'Password must be at least 8 characters' }
                   })}
                   type="password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
                   placeholder="Create a password"
                 />
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.password.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="confirmPassword" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Confirm Password
                 </label>
                 <input
@@ -655,18 +655,18 @@ export default function AuthPage() {
                     validate: value => value === password || 'Passwords do not match'
                   })}
                   type="password"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-black"
                   placeholder="Confirm your password"
                 />
                 {errors.confirmPassword && (
-                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.confirmPassword.message}</p>
                 )}
               </div>
 
               <motion.button
                 onClick={handleStepContinue}
                 disabled={isLoading}
-                className={`w-full py-3 px-4 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg ${
+                className={`w-full py-2 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-lg ${
                   isLoading 
                     ? 'bg-orange-400 cursor-not-allowed' 
                     : 'bg-orange-500 hover:bg-orange-600'
@@ -682,23 +682,23 @@ export default function AuthPage() {
             </div>
           ) : isSignUp && signUpStep === 5 ? (
             /* User Type Selection Step */
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-600 mb-6">
+                <p className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">
                   Almost done! Choose how you&apos;ll use Mero Tasbir
                 </p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 <motion.button
                   type="button"
                   onClick={() => setUserType('user')}
-                  className={`w-full p-4 border-2 rounded-xl text-left transition-all ${
+                  className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl text-left transition-all ${
                     userType === 'user' 
                       ? 'border-orange-500 bg-orange-50' 
                       : 'border-gray-300 hover:border-gray-400'
@@ -707,16 +707,16 @@ export default function AuthPage() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center">
-                    <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                    <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 mr-2 sm:mr-3 ${
                       userType === 'user' ? 'border-orange-500 bg-orange-500' : 'border-gray-300'
                     }`}>
                       {userType === 'user' && (
-                        <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5"></div>
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mx-auto mt-0.5"></div>
                       )}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-black">I&apos;m looking for photography services</h3>
-                      <p className="text-sm text-gray-600">Book photographers, buy images, and access premium content</p>
+                      <h3 className="text-sm sm:text-base font-semibold text-black">I&apos;m looking for photography services</h3>
+                      <p className="text-xs sm:text-sm text-gray-600">Book photographers, buy images, and access premium content</p>
                     </div>
                   </div>
                 </motion.button>
@@ -724,7 +724,7 @@ export default function AuthPage() {
                 <motion.button
                   type="button"
                   onClick={() => setUserType('freelancer')}
-                  className={`w-full p-4 border-2 rounded-xl text-left transition-all ${
+                  className={`w-full p-3 sm:p-4 border-2 rounded-lg sm:rounded-xl text-left transition-all ${
                     userType === 'freelancer' 
                       ? 'border-orange-500 bg-orange-50' 
                       : 'border-gray-300 hover:border-gray-400'
@@ -733,16 +733,16 @@ export default function AuthPage() {
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className="flex items-center">
-                    <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                    <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 mr-2 sm:mr-3 ${
                       userType === 'freelancer' ? 'border-orange-500 bg-orange-500' : 'border-gray-300'
                     }`}>
                       {userType === 'freelancer' && (
-                        <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5"></div>
+                        <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full mx-auto mt-0.5"></div>
                       )}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-black">I&apos;m a photographer/videographer</h3>
-                      <p className="text-sm text-gray-600">Sell your work, find clients, and grow your business</p>
+                      <h3 className="text-sm sm:text-base font-semibold text-black">I&apos;m a photographer/videographer</h3>
+                      <p className="text-xs sm:text-sm text-gray-600">Sell your work, find clients, and grow your business</p>
                     </div>
                   </div>
                 </motion.button>
@@ -751,7 +751,7 @@ export default function AuthPage() {
               <motion.button
                 onClick={handleStepContinue}
                 disabled={!userType || isLoading}
-                className={`w-full py-3 px-4 font-semibold rounded-xl transition-all duration-300 ${
+                className={`w-full py-2 sm:py-3 px-3 sm:px-4 text-sm sm:text-base font-semibold rounded-lg sm:rounded-xl transition-all duration-300 ${
                   !userType || isLoading
                     ? 'text-gray-400 bg-gray-200 cursor-not-allowed' 
                     : 'text-white bg-orange-500 hover:bg-orange-600 shadow-lg'
@@ -767,14 +767,14 @@ export default function AuthPage() {
             </div>
           ) : (
             /* Basic Form (Step 1 for Sign Up or Sign In) */
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
               {isSignUp && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   transition={{ duration: 0.3 }}
                 >
-                  <label htmlFor="name" className="block text-sm font-medium text-black mb-1">
+                  <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-black mb-1">
                     Full Name
                   </label>
                   <input
@@ -784,19 +784,19 @@ export default function AuthPage() {
                       required: isSignUp ? 'Full name is required' : false,
                       minLength: { value: 2, message: 'Name must be at least 2 characters' }
                     })}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
                       errors.name ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-orange-500 focus:border-orange-500'
                     }`}
                     placeholder="Enter your full name"
                   />
                   {errors.name && (
-                    <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+                    <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.name.message}</p>
                   )}
                 </motion.div>
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Email Address
                 </label>
                 <input
@@ -809,18 +809,18 @@ export default function AuthPage() {
                       message: 'Invalid email address'
                     }
                   })}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
                     errors.email ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-orange-500 focus:border-orange-500'
                   }`}
                   placeholder="Enter your email"
                 />
                 {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.email.message}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-black mb-1">
+                <label htmlFor="password" className="block text-xs sm:text-sm font-medium text-black mb-1">
                   Password
                 </label>
                 <input
@@ -830,13 +830,13 @@ export default function AuthPage() {
                     required: 'Password is required',
                     minLength: { value: 6, message: 'Password must be at least 6 characters' }
                   })}
-                  className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
                     errors.password ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-orange-500 focus:border-orange-500'
                   }`}
                   placeholder="Enter your password"
                 />
                 {errors.password && (
-                  <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.password.message}</p>
                 )}
               </div>
 
@@ -846,7 +846,7 @@ export default function AuthPage() {
                   animate={{ opacity: 1, height: 'auto' }}
                   transition={{ duration: 0.3 }}
                 >
-                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-black mb-1">
+                  <label htmlFor="confirmPassword" className="block text-xs sm:text-sm font-medium text-black mb-1">
                     Confirm Password
                   </label>
                   <input
@@ -856,24 +856,24 @@ export default function AuthPage() {
                       required: isSignUp ? 'Please confirm your password' : false,
                       validate: value => value === password || 'Passwords do not match'
                     })}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 transition-colors text-black ${
                       errors.confirmPassword ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : 'border-gray-300 focus:ring-orange-500 focus:border-orange-500'
                     }`}
                     placeholder="Confirm your password"
                   />
                   {errors.confirmPassword && (
-                    <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
+                    <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.confirmPassword.message}</p>
                   )}
                 </motion.div>
               )}
 
               {!isSignUp && (
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                   <label className="flex items-center">
                     <input type="checkbox" className="rounded border-gray-300 text-orange-500 focus:ring-orange-500" />
-                    <span className="ml-2 text-sm text-gray-600">Remember me</span>
+                    <span className="ml-2 text-xs sm:text-sm text-gray-600">Remember me</span>
                   </label>
-                  <Link href="/forgot-password" className="text-sm text-orange-500 hover:text-orange-600">
+                  <Link href="/forgot-password" className="text-xs sm:text-sm text-orange-500 hover:text-orange-600">
                     Forgot password?
                   </Link>
                 </div>
@@ -882,7 +882,7 @@ export default function AuthPage() {
               <motion.button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full py-3 px-4 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg ${
+                className={`w-full py-2 sm:py-3 px-3 sm:px-4 text-sm sm:text-base text-white font-semibold rounded-lg sm:rounded-xl transition-all duration-300 shadow-lg ${
                   isLoading 
                     ? 'bg-orange-400 cursor-not-allowed' 
                     : 'bg-orange-500 hover:bg-orange-600'
@@ -902,8 +902,8 @@ export default function AuthPage() {
           )}
 
           {/* Toggle Auth Mode */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+          <div className="mt-4 sm:mt-6 text-center">
+            <p className="text-xs sm:text-sm text-gray-600">
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}
               <button
                 onClick={() => {
