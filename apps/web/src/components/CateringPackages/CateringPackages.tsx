@@ -123,8 +123,10 @@ export default function CateringPackages() {
         </div>
 
         {/* Main Catering Packages */}
-        <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0" 
-             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+        <div 
+  className="flex justify-center items-center gap-6 overflow-x-auto pb-4 scrollbar-hide md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0 " 
+  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+>
           <style jsx>{`
             .scrollbar-hide::-webkit-scrollbar {
               display: none;
@@ -186,7 +188,7 @@ export default function CateringPackages() {
                   className={`w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 ${
                     pkg.popular
                       ? 'text-white'
-                      : 'text-orange-500 border-2 border-orange-500 hover:bg-orange-500 hover:text-white'
+                      : 'text-orange-500 border-2 border-orange-500 hover:bg-orange-500'
                   }`}
                   style={{ 
                     backgroundColor: pkg.popular ? '#FB7F33' : 'transparent'

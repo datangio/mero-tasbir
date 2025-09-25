@@ -119,7 +119,8 @@ const WorkBentoGrid = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           viewport={{ once: true }}
         >
-          <motion.button
+          <motion.a
+          href="/booking"
             className="px-8 py-4 text-white text-lg font-semibold rounded-full shadow-lg transition-all duration-300"
             style={{ backgroundColor: '#E08E45' }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#D07A3A'}
@@ -128,7 +129,7 @@ const WorkBentoGrid = () => {
             whileTap={{ scale: 0.95 }}
           >
             Book Your Memories
-          </motion.button>
+          </motion.a>
         </motion.div>
       </div>
     </section>

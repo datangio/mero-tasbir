@@ -3,9 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import Footer from "../../components/Footer/page";
+
 
 export default function Events() {
-  const [activeSection, setActiveSection] = useState('home');
+  // const [activeSection, setActiveSection] = useState('home');
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [activeMenuCategory, setActiveMenuCategory] = useState('snacks');
 
@@ -271,7 +273,7 @@ export default function Events() {
                   "Up to 50 guests"
                 ],
                 popular: false,
-                icon: "🥘"
+               
               },
               {
                 name: "Premium Package",
@@ -288,7 +290,6 @@ export default function Events() {
                   "Custom menu options"
                 ],
                 popular: true,
-                icon: "🍽️"
               },
               {
                 name: "Luxury Package",
@@ -307,7 +308,6 @@ export default function Events() {
                   "Live cooking stations"
                 ],
                 popular: false,
-                icon: "👑"
               }
             ].map((pkg, index) => (
               <motion.div
@@ -350,23 +350,11 @@ export default function Events() {
                   transition={{ delay: index * 0.2 + 0.3 }}
                 >
                   <div className="text-center mb-6">
-                    <motion.div 
-                      className="text-6xl mb-4"
-                      initial={{ scale: 0, rotate: -180 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ 
-                        delay: index * 0.2 + 0.4, 
-                        type: "spring",
-                        stiffness: 200
-                      }}
-                    >
-                      {pkg.icon}
-                    </motion.div>
+                    
                     <motion.h3 
                       className="text-2xl font-bold text-black mb-2 transition-colors duration-300"
-                      style={{ color: '#000000' }}
                       onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
-                      onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = '#000000ff'}
                       whileHover={{ x: 5 }}
                     >
                       {pkg.name}
@@ -947,6 +935,9 @@ export default function Events() {
           </motion.div>
         )}
       </AnimatePresence>
+
+        <Footer />
+      
     </div>
   );
 }

@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 
 import Image from "next/image";
-import Navbar from "../../components/Navbar/page";
 import Footer from "../../components/Footer/page";
 
 
@@ -108,8 +107,7 @@ export default function CareerPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      <Navbar />
+
 
 <section className="relative h-[600px] overflow-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/career-hero.jpg')" }}>
         <div className="absolute inset-0 bg-black/50"></div>

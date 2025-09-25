@@ -41,9 +41,9 @@ const HeroSection = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              Your Complete
+              Nepal's #1 
               <span className="block text-orange-500">
-                Event Solution
+                Media Event Platform
               </span>
             </motion.h1>
 

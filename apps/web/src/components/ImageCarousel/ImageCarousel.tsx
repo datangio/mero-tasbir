@@ -144,7 +144,7 @@ const ImageCarousel = () => {
             <motion.button
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               className="px-6 py-2 text-white text-sm font-semibold rounded-full transition-all duration-300"
               style={{ backgroundColor: '#FB7F33' }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E06B2A'}

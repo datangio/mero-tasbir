@@ -21,7 +21,7 @@ const FreelancerMarketplace = () => {
       category: "Photography",
       price: 3300,
       currency: "NPR",
-      image: "/images/wedding.jpg",
+      image: "/images/sun set.jpg",
       resolution: "4K",
       format: "JPG",
       downloads: 127,

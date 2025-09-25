@@ -80,7 +80,6 @@ export default function EventPackages() {
         'Photo book (20 pages)',
         'Drone shots (weather permitting)',
         'Priority editing (within 3 days)',
-        'Travel anywhere in Nepal included',
       ],
       buttonText: 'Book Premium Package',
       buttonColor: 'bg-gray-800 hover:bg-gray-900 text-white',
@@ -114,7 +113,7 @@ export default function EventPackages() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">
             Wedding Photography
             <span className="block" style={{ color: '#FB7F33' }}>
               Packages
@@ -127,7 +126,10 @@ export default function EventPackages() {
         </motion.div>
       </div>
 
-      <div className="flex justify-center items-center gap-6 overflow-x-auto pb-4 scrollbar-hide md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+      <div 
+  className="flex justify-center items-center gap-6 overflow-x-auto pb-4 scrollbar-hide md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0 pt-4" 
+  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+>
         {packages.map((pkg, index) => (
           <div
             key={index}

@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 
-import Navbar from '../../components/Navbar/page';
 import Footer from '../../components/Footer/page';
 
 // Services offered by Mero Tasbir
@@ -75,8 +74,6 @@ const processSteps = [
 export default function Service() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      <Navbar />
 
       {/* Hero Section */}
       <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
@@ -98,7 +95,7 @@ export default function Service() {
           {/* Right Side: Image */}
           <div className="w-full md:w-1/2">
             <Image
-              src="/images/mero-tasbir-hero.jpg"
+              src="/images/Banner.webp"
               alt="Mero Tasbir - Photography & Videography Platform"
               width={600}
               height={400}

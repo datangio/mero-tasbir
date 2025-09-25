@@ -2,7 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Menu, Phone, Mail, Calendar, MapPin, Clock, Users } from "lucide-react";
+import { X, Play,  Phone, Mail, Calendar, MapPin, Clock, Users } from "lucide-react";
 import { BottomNavigator } from "./BottomNavigator";
 import { Testimonials } from "./Testimonials";
 import { FAQ } from "./FAQ";
@@ -66,7 +66,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
       time: "9:00 AM - 6:00 PM",
       guests: "200+",
       description: "Professional corporate event documentation with high-quality photography services. Perfect for conferences, seminars, product launches, and company celebrations.",
-      image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      image: "/images/corporate-event.png"
     },
     {
       id: 3,
@@ -76,7 +76,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
       time: "10:00 AM - 4:00 PM",
       guests: "80+",
       description: "Traditional Pasni ceremony photography capturing the cultural significance and joy of this important milestone in a child's life. We respect and document traditional customs beautifully.",
-      image: "https://images.unsplash.com/photo-1529626465617-a207a7bb2348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+      image: "/images/pasni.jpg"
     }
   ];
 
@@ -389,7 +389,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
 
           {/* Call to Action */}
           <motion.div
-          className="mt-16 text-center"
+          className="mt-6 text-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -397,13 +397,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
           <p className="mb-6 text-lg text-gray-600">
             Can't find what you're looking for? We offer custom photography packages!
           </p>
-          <motion.button
+          <motion.a
+          href="/contact"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 px-8 py-3 text-white font-semibold shadow-lg transition-all duration-300 hover:shadow-xl"
           >
             Contact Us for Custom Packages
-          </motion.button>
+          </motion.a>
         </motion.div>
 
     
@@ -620,6 +621,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
             Let us help you preserve the memories of your special occasion with our professional photography services.
           </p>
           <motion.button
+          
             className="text-white px-12 py-4 rounded-full text-lg font-semibold transition-colors duration-300"
             style={{ backgroundColor: '#FB7F33' }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#E06B2A'}

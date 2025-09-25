@@ -6,7 +6,7 @@ import HeroSection from "@/components/HeroSection/page";
 import ImageCarousel from "@/components/ImageCarousel/ImageCarousel";
 import WorkBentoGrid from "@/components/WorkBentoGrid/WorkBentoGrid";
 import FreelancerMarketplace from "@/components/FreelancerMarketplace/FreelancerMarketplace";
-import Service from "@/components/Service/page";
+// import Service from "@/components/Service/page";
 
 // import Course from "@/app/course/page";
 import Pricing from "@/components/Pricing/page";
@@ -30,13 +30,12 @@ export default function Home() {
         <Pricing />
         <CateringPackages />
         <FreelancerMarketplace />
-        <Service />
+        {/* <Service /> */}
         {/* <Course /> */}
 
       
         <Testimonial />
         <FAQ />
-        {/* Footer */}
         <Footer />
       </main>
     </div>
