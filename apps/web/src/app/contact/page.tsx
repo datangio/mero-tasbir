@@ -4,9 +4,6 @@ import Footer from "../../components/Footer/page";
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navbar */}
-      <Navbar />
-
      {/* Hero Section */}
 <section className="px-4 py-16 sm:px-6 lg:px-8">
   <div className="mx-auto max-w-7xl">

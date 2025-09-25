@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, ShoppingCart, User, AlignLeft, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import CartModal from "../CartModal/CartModal";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -160,6 +161,7 @@ export default function Navbar() {
               aria-haspopup="true"
               aria-expanded={isLearningHubOpen}
             >
+              <Link href="/course">
               <button
                 className={`px-2 py-2 text-sm xl:text-base font-medium transition-colors whitespace-nowrap ${
                   isLearningHubOpen ? "" : "text-black"
@@ -168,6 +170,7 @@ export default function Navbar() {
               >
                 Learning Hub
               </button>
+              </Link>
 
               {/* Full-Width Dropdown */}
               {/* <div
