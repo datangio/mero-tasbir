@@ -1,5 +1,4 @@
 
-import Footer from "@/components/Footer/page";
 import Banner from "@/components/Banner/Banner";
 
 import HeroSection from "@/components/HeroSection/page";
@@ -18,8 +17,7 @@ export default function Home() {
   return (
     <div className="w-full">
       <main className="min-h-screen bg-white">
-        {/* Navbar */}
-       
+      
        
         {/* Banner */}
         <Banner />
@@ -36,7 +34,6 @@ export default function Home() {
       
         <Testimonial />
         <FAQ />
-        <Footer />
       </main>
     </div>
   );

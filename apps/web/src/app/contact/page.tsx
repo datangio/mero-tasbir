@@ -1,4 +1,4 @@
-import Footer from "../../components/Footer/page";
+import Navbar from "../../components/Navbar/page";
 
 export default function ContactPage() {
   return (
@@ -264,9 +264,6 @@ For inqueries, to schedule a visit, or for any assitance, please feel free to co
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

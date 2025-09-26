@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-import Footer from '../../components/Footer/page';
+import Navbar from '../../components/Navbar/page';
 
 // Services offered by Mero Tasbir
 const services = [
@@ -243,9 +243,6 @@ export default function Service() {
           ))}
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

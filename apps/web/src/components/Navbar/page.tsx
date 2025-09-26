@@ -1,49 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ShoppingCart, User, AlignLeft, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import CartModal from "../CartModal/CartModal";
-import SignupModal from "../SignupModal/SignupForm";
-import { useRouter } from "next/navigation"; // For App Router
-
+import ChangePasswordModal from "../ChangePasswordModal/ChangePasswordModal";
 import Link from "next/link";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLearningHubOpen, setIsLearningHubOpen] = useState(false);
   const [isServiceOpen, setIsServiceOpen] = useState(false);
-  const [isLearningOpen, setIsLearningOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
   const { cartCount, isCartOpen, setIsCartOpen } = useCart();
-  const [isModalOpen, setIsSignupOpen] = useState(false);
+  const { user, logout } = useAuth();
 
+  // Toggle Learning Hub menu on click
+  const toggleLearningHub = () => {
+    setIsLearningHubOpen(!isLearningHubOpen);
+  };
 
   // Toggle Service menu on click
   const toggleService = () => {
     setIsServiceOpen(!isServiceOpen);
   };
-  const toggleLearning = () => {
-    setIsLearningOpen(!isLearningOpen);
+
+  // Toggle User menu on click
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
   };
 
-  const router = useRouter();
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isUserMenuOpen) {
+        const target = event.target as Element;
+        if (!target.closest('[data-user-menu]')) {
+          setIsUserMenuOpen(false);
+        }
+      }
+    };
 
-  // Close mobile menu after navigation
-  const handleNavClick = () => {
-    setIsMenuOpen(false);
-    setIsServiceOpen(false);
-    setIsLearningOpen(false);
-  };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
+
   // Toggle Search bar
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
     if (!isSearchOpen) {
       // Focus on search input when opening
       setTimeout(() => {
-        const searchInput = document.getElementById("search-input");
+        const searchInput = document.getElementById('search-input');
         if (searchInput) searchInput.focus();
       }, 100);
     }
@@ -53,7 +69,7 @@ export default function Navbar() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      console.log("Searching for:", searchQuery);
+      console.log('Searching for:', searchQuery);
       // Add your search logic here
       // For now, just close the search bar
       setIsSearchOpen(false);
@@ -61,23 +77,13 @@ export default function Navbar() {
     }
   };
 
-  const services = [
-    { name: "Photography", href: "/booking" },
-    { name: "Videography", href: "/events" },
-  ];
-
-  const courses = [
-    { name: "Photography", href: "/photography" },
-    { name: "Videography", href: "/videography" },
-    { name: "VFX Editing", href: "/vfx" },
-  ];
 
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
-      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center">
           {/* Mobile Hamburger Menu Button - Left Side */}
-          <div className="mr-2 flex items-center lg:hidden">
+          <div className="lg:hidden flex items-center mr-2">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="hamburger-menu rounded p-1 text-black hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -89,226 +95,297 @@ export default function Navbar() {
           </div>
 
           {/* Logo */}
-
           <div className="flex items-center">
-            <Link href="/" className="flex items-center">
-              <Image
-                src="/images/MeroTasbir-logo.png"
-                alt="Mero Tasbir Logo"
-                width={120}
-                height={120}
-                className="h-24 w-24 cursor-pointer lg:h-28 lg:w-28"
-                priority
-              />
-            </Link>
+            <Image
+              src="/images/MeroTasbir-logo.png"
+              alt="Mero Tasbir Logo"
+              width={120}
+              height={120}
+              className="h-24 w-24 lg:h-28 lg:w-28"
+            />
           </div>
 
           {/* Spacer to push right side icons to the right */}
           <div className="flex-1"></div>
 
           {/* Desktop Navigation */}
-          {/* CORRECTED: ADDED `items-center` CLASS HERE */}
-          <div className="nav-item relative hidden items-center space-x-5 text-black xl:space-x-3 lg:flex">
-            {/* 1. Home */}
-            <a
-              href="/"
-              className="whitespace-nowrap px-2 py-2 text-sm font-medium text-black transition-colors hover:text-orange-500 xl:text-base"
-              onMouseEnter={e => (e.currentTarget.style.color = "#FB7F33")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#000000")}
-            >
-              Home
-            </a>
+          <div className="hidden nav-item space-x-5 xl:space-xl-3 text-black">
+            {[
+              { label: "Home", href: "/" },
+              { label: "Marketplace", href: "/marketplace" },
+              { label: "For Freelancer", href: "/freelancer" },
+              { label: "Career", href: "/career" },
+              { label: "Contact Us", href: "/contact" },
+            ].map(item => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="px-2 py-2 text-sm xl:text-base font-medium text-black transition-colors hover:opacity-80 whitespace-nowrap"
+                onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+              >
+                {item.label}
+              </a>
+            ))}
 
-            {/* 2. Service Dropdown */}
-            {/* CORRECTED: REMOVED `inline-block` HERE, ADDED `self-center` to fix misalignment*/}
+            {/* Service Dropdown */}
             <div
-              className="group relative self-center"
+              className="group relative"
               onMouseEnter={() => setIsServiceOpen(true)}
               onMouseLeave={() => setIsServiceOpen(false)}
+              onClick={toggleService}
               role="menuitem"
               aria-haspopup="true"
               aria-expanded={isServiceOpen}
             >
-              {/* Main Services Link */}
-              <a
-                href="/services" // Fallback for SEO & non-JS
-                className={`whitespace-nowrap px-2 py-2 text-sm font-medium transition-colors xl:text-base ${
-                  isServiceOpen ? "text-orange-500" : "text-black"
+              <button
+                className={`px-2 py-2 text-sm xl:text-base font-medium transition-colors whitespace-nowrap ${
+                  isServiceOpen ? "" : "text-black"
                 }`}
-                style={{ color: isServiceOpen ? "#FB7F33" : "#000000" }}
-                onClick={e => {
-                  e.preventDefault();
-                  router.push("/services");
-                }}
+                style={{ color: isServiceOpen ? '#FB7F33' : '#000000' }}
               >
-                Services
-              </a>
+                Service
+              </button>
 
-              {/* Dropdown Menu */}
+              {/* Service Dropdown Menu */}
               <div
-                className={`absolute left-0 top-full z-50 rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-200 ease-in-out ${
+                className={`absolute left-0 mt-2 rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-200 ease-in-out ${
                   isServiceOpen
-                    ? "visible translate-y-0 opacity-100"
-                    : "pointer-events-none invisible -translate-y-2 opacity-0"
+                    ? "visible opacity-100"
+                    : "invisible opacity-0"
                 }`}
-                onMouseLeave={() => setIsServiceOpen(false)}
+                style={{ top: "100%" }}
+                onClick={e => e.stopPropagation()}
               >
-                <div className="min-w-[200px] py-2">
-                  {services.map(item => (
-                    <a
-                      key={item.name}
-                      href={item.href}
-                      className="block px-4 py-2 text-sm text-black transition-colors hover:bg-gray-100 hover:text-orange-500"
-                      style={{ color: "#000000" }}
-                      onClick={e => {
-                        e.preventDefault();
-                        router.push(item.href);
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.color = "#FB7F33";
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.color = "#000000";
-                      }}
-                    >
-                      {item.name}
-                    </a>
-                  ))}
+                <div className="py-2 min-w-[200px]">
+                  <a
+                    href="/booking"
+                    className="block px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                  >
+                    Photography
+                  </a>
+                  <a
+                    href="/events"
+                    className="block px-4 py-2 text-sm text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                  >
+                    Events
+                  </a>
                 </div>
               </div>
             </div>
 
-            {/* 3. Marketplace */}
-            <a
-              href="/marketplace"
-              className="whitespace-nowrap px-2 py-2 text-sm font-medium text-black transition-colors hover:text-orange-500 xl:text-base"
-              onMouseEnter={e => (e.currentTarget.style.color = "#FB7F33")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#000000")}
-            >
-              Marketplace
-            </a>
-
-            {/* 4. Learning Hub Dropdown */}
-            {/* CORRECTED: REMOVED `mt-1.5` AND `inline-block` HERE, ADDED `self-center` */}
+            {/* Learning Hub with Dropdown */}
             <div
-              className="group relative self-center"
-              onMouseEnter={() => setIsLearningOpen(true)}
-              onMouseLeave={() => setIsLearningOpen(false)}
+              className="group relative"
+              onMouseEnter={() => setIsLearningHubOpen(true)}
+              onMouseLeave={() => setIsLearningHubOpen(false)}
+              onClick={toggleLearningHub}
               role="menuitem"
               aria-haspopup="true"
-              aria-expanded={isLearningOpen}
+              aria-expanded={isLearningHubOpen}
             >
-              <a
-                href="/course"
-                className={`whitespace-nowrap px-2 py-2 text-sm font-medium transition-colors xl:text-base ${
-                  isLearningOpen ? "text-orange-500" : "text-black"
+              <Link href="/course">
+              <button
+                className={`px-2 py-2 text-sm xl:text-base font-medium transition-colors whitespace-nowrap ${
+                  isLearningHubOpen ? "" : "text-black"
                 }`}
-                style={{ color: isLearningOpen ? "#FB7F33" : "#000000" }}
-                onClick={e => {
-                  e.preventDefault();
-                  router.push("/course");
-                }}
+                style={{ color: isLearningHubOpen ? '#FB7F33' : '#000000' }}
               >
                 Learning Hub
-              </a>
+              </button>
+              </Link>
 
-              <div
-                className={`absolute left-0 top-full z-50 rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-200 ease-in-out ${
-                  isLearningOpen
-                    ? "visible translate-y-0 opacity-100"
-                    : "pointer-events-none invisible -translate-y-2 opacity-0"
+              {/* Full-Width Dropdown */}
+              {/* <div
+                className={`absolute left-0 right-0 mt-2 rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-200 ease-in-out ${
+                  isLearningHubOpen
+                    ? "visible opacity-100"
+                    : "invisible opacity-0"
                 }`}
-                onMouseLeave={() => setIsLearningOpen(false)}
+                style={{ top: "100%" }}
+                onClick={e => e.stopPropagation()} // Prevent closing on click
               >
-                <div className="min-w-[200px] py-2">
-                  {courses.map(item => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="block px-4 py-2 text-sm text-black transition-colors hover:bg-gray-100 hover:text-orange-500"
-                      style={{ color: "#000000" }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.color = "#FB7F33";
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.color = "#000000";
-                      }}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                <div className="grid grid-cols-2 gap-6 p-6">
+                  <div>
+                    <h3 className="font-semibold text-black">Photography</h3>
+                    <ul className="mt-2 space-y-1">
+                      <li>
+                      <a
+                        href="#"
+                        className="text-sm text-black hover:opacity-80"
+                        onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                      >
+                        Portrait
+                      </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="text-sm text-black hover:opacity-80"
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                        >
+                          Wedding
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="text-sm text-black hover:opacity-80"
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                        >
+                          Event
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-black">Videography</h3>
+                    <ul className="mt-2 space-y-1">
+                      <li>
+                        <a
+                          href="#"
+                          className="text-sm text-black hover:opacity-80"
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                        >
+                          Cinematic
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="text-sm text-black hover:opacity-80"
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                        >
+                          Event
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="text-sm text-black hover:opacity-80"
+                          onMouseEnter={(e) => e.currentTarget.style.color = '#FB7F33'}
+                          onMouseLeave={(e) => e.currentTarget.style.color = '#000000'}
+                        >
+                          Editing
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
-            {/* 5. Career */}
-            <a
-              href="/career"
-              className="whitespace-nowrap px-2 py-2 text-sm font-medium text-black transition-colors hover:text-orange-500 xl:text-base"
-              onMouseEnter={e => (e.currentTarget.style.color = "#FB7F33")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#000000")}
-            >
-              Career
-            </a>
-
-            {/* 6. Contact Us */}
-            <a
-              href="/contact"
-              className="whitespace-nowrap px-2 py-2 text-sm font-medium text-black transition-colors hover:text-orange-500 xl:text-base"
-              onMouseEnter={e => (e.currentTarget.style.color = "#FB7F33")}
-              onMouseLeave={e => (e.currentTarget.style.color = "#000000")}
-            >
-              Contact Us
-            </a>
           </div>
 
           {/* Desktop Icons & CTA */}
-          <div className="nav-item ml-6 hidden items-center space-x-2 xl:space-x-3">
-            <button
-              onClick={() => setIsCartOpen(true)}
-              aria-label="Shopping Cart"
-              className="relative rounded p-1 text-black transition-colors hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-            >
-              <ShoppingCart className="h-6 w-6" />
-              {cartCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
-                  {cartCount > 99 ? "99+" : cartCount}
-                </span>
-              )}
-            </button>
+          <div className="hidden nav-item items-center space-x-2 xl:space-x-3 ml-6">
+              <button
+                onClick={() => setIsCartOpen(true)}
+                aria-label="Shopping Cart"
+                className="relative rounded p-1 text-black transition-colors hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
+                <ShoppingCart className="h-6 w-6" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartCount > 99 ? '99+' : cartCount}
+                  </span>
+                )}
+              </button>
 
-            <button
-              onClick={toggleSearch}
-              aria-label="Search"
-              className="rounded p-1 text-black transition-colors hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-            >
+              <button
+                onClick={toggleSearch}
+                aria-label="Search"
+                className="rounded p-1 text-black transition-colors hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
               <Search className="h-6 w-6" />
-            </button>
+              </button>
 
-            <a
-              href="/auth"
-              aria-label="Profile"
-              className="rounded p-1 text-black transition-colors hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-            >
+              <a
+                href="/auth"
+                aria-label="Profile"
+                className="rounded p-1 text-black transition-colors hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
               <User className="h-6 w-6" />
-            </a>
+              </a>
 
-            {/* For Freelancer Button */}
+              {user ? (
+                <div
+                  className="group relative"
+                  onMouseEnter={() => setIsUserMenuOpen(true)}
+                  onMouseLeave={() => setIsUserMenuOpen(false)}
+                  onClick={toggleUserMenu}
+                  role="menuitem"
+                  aria-haspopup="true"
+                  aria-expanded={isUserMenuOpen}
+                  data-user-menu
+                >
+                  <button
+                    className={`px-3 py-2 text-sm xl:text-base font-medium transition-colors whitespace-nowrap rounded-lg ${
+                      isUserMenuOpen ? "bg-orange-100 text-orange-600" : "text-black hover:bg-gray-100"
+                    }`}
+                  >
+                    Hi, {user.fullName || user.username}
+                  </button>
 
-            <button
-              onClick={() => setIsSignupOpen(true)}
-              className="whitespace-nowrap rounded-full bg-orange-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 xl:text-base"
-            >
-              For Freelancer
-            </button>
-            <SignupModal
-              isOpen={isModalOpen}
-              onClose={() => setIsSignupOpen(false)}
-            />
+                  {/* User Dropdown Menu */}
+                  <div
+                    className={`absolute right-0 mt-2 rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-200 ease-in-out ${
+                      isUserMenuOpen
+                        ? "visible opacity-100"
+                        : "invisible opacity-0"
+                    }`}
+                    style={{ top: "100%" }}
+                    onClick={e => e.stopPropagation()}
+                  >
+                    <div className="py-2 min-w-[200px]">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900">{user.fullName || user.username}</p>
+                        <p className="text-xs text-gray-500">{user.email}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsChangePasswordOpen(true);
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      >
+                        Change Password
+                      </button>
+                      <button
+                        onClick={logout}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  className="rounded-full bg-orange-500 px-3 py-2 text-sm xl:text-base font-medium text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 whitespace-nowrap"
+                  aria-label="Get Rented"
+                >
+                  Get Rented
+                </button>
+              )}
           </div>
 
+         
+
+
+         
+
           {/* Mobile Navigation - Right Side Icons */}
-          <div className="mobile-nav-icons flex items-center space-x-2 lg:hidden">
+          <div className="mobile-nav-icons lg:hidden flex items-center space-x-2">
             {/* Search Button */}
             <button
               onClick={toggleSearch}
@@ -326,8 +403,8 @@ export default function Navbar() {
             >
               <ShoppingCart className="h-6 w-6" />
               {cartCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
-                  {cartCount > 99 ? "99+" : cartCount}
+                <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartCount > 99 ? '99+' : cartCount}
                 </span>
               )}
             </button>
@@ -340,260 +417,270 @@ export default function Navbar() {
             >
               <User className="h-6 w-6" />
             </a>
-          </div>
+          </div> 
 
-          {/* Mobile Menu */}
-          <AnimatePresence>
-            {isMenuOpen && (
-              <motion.div
-                className="fixed inset-0 z-40 flex flex-col bg-white lg:hidden"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                role="dialog"
-                aria-modal="true"
+        {/* Mobile Menu */}
+        <AnimatePresence>
+        {isMenuOpen && (
+            <motion.div
+            id="mobile-menu"
+            className="fixed inset-0 z-40 bg-white lg:hidden"
+            role="menu"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ 
+                duration: 0.3, 
+                ease: "easeInOut"
+              }}
+          >
+            {/* Top Bar */}
+            <div className="flex h-20 items-center px-4 border-b border-gray-200">
+              {/* Close Button - Same position as hamburger */}
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="rounded p-1 text-black hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 mr-2"
               >
-                {/* Top Bar */}
-                <div className="flex h-20 items-center justify-between border-b border-gray-200 px-4">
+                <X className="h-6 w-6" />
+              </button>
+
+              {/* Logo */}
+              <div className="flex items-center">
+                <Image
+                  src="/images/MeroTasbir-logo.png"
+                  alt="Mero Tasbir Logo"
+                  width={120}
+                  height={120}
+                  className="h-24 w-24"
+                />
+              </div>
+              
+              {/* Spacer to push right side icons to the right */}
+              <div className="flex-1"></div>
+              
+              {/* Top Right Icons */}
+              <div className="flex items-center space-x-3">
+                {user ? (
+                  <div
+                    className="group relative"
+                    onMouseEnter={() => setIsUserMenuOpen(true)}
+                    onMouseLeave={() => setIsUserMenuOpen(false)}
+                    onClick={toggleUserMenu}
+                    role="menuitem"
+                    aria-haspopup="true"
+                    aria-expanded={isUserMenuOpen}
+                    data-user-menu
+                  >
+                    <button
+                      className={`px-3 py-2 text-sm font-medium transition-colors whitespace-nowrap rounded-lg ${
+                        isUserMenuOpen ? "bg-orange-100 text-orange-600" : "text-black hover:bg-gray-100"
+                      }`}
+                    >
+                      Hi, {user.fullName || user.username}
+                    </button>
+
+                    {/* User Dropdown Menu - Mobile */}
+                    <div
+                      className={`absolute right-0 mt-2 rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-200 ease-in-out ${
+                        isUserMenuOpen
+                          ? "visible opacity-100"
+                          : "invisible opacity-0"
+                      }`}
+                      style={{ top: "100%" }}
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <div className="py-2 min-w-[200px]">
+                        <div className="px-4 py-2 border-b border-gray-100">
+                          <p className="text-sm font-medium text-gray-900">{user.fullName || user.username}</p>
+                          <p className="text-xs text-gray-500">{user.email}</p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setIsChangePasswordOpen(true);
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          Change Password
+                        </button>
+                        <button
+                          onClick={logout}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
                   <button
-                    onClick={() => setIsMenuOpen(false)}
-                    className="rounded p-1 text-black hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    aria-label="Close menu"
+                    className="rounded-full bg-orange-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                  >
+                    Get Rented
+                  </button>
+                )}
+                
+                {/* User Icon */}
+                <a
+                  href="/auth"
+                  aria-label="Profile"
+                  className="rounded p-1 text-black transition-colors hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                >
+                  <User className="h-6 w-6" />
+                </a>
+              </div>
+            </div>
+
+            {/* Navigation Content */}
+            <motion.div 
+              className="flex-1 overflow-y-auto px-4 py-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+            >
+              <div className="space-y-1">
+              {[
+                { label: "Home", href: "/" },
+                { label: "Marketplace", href: "/marketplace" },
+                { label: "For Freelancer", href: "/freelancer" },
+                { label: "Career", href: "/career" },
+                { label: "Contact Us", href: "/contact" },
+                { label: "Learning Hub", href: "/course" },
+                ].map((item, index) => (
+                  <motion.a
+                  key={item.label}
+                  href={item.href}
+                    className="block rounded-md px-3 py-3 text-lg font-medium text-black hover:bg-gray-100 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  style={{ color: '#000000' }}
+                  role="menuitem"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.2 + index * 0.1, ease: "easeOut" }}
+                >
+                  {item.label}
+                  </motion.a>
+              ))}
+              </div>
+              
+              {/* Service Mobile Menu */}
+              <motion.div 
+                className="px-3 py-2"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.3, ease: "easeOut" }}
+              >
+                  <div className="text-lg font-medium text-black mb-2">Service</div>
+                <div className="ml-4 space-y-1">
+                  <motion.a
+                    href="/booking"
+                      className="block rounded-md px-3 py-3 text-base text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                    style={{ color: '#000000' }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.4, ease: "easeOut" }}
+                  >
+                    Photography
+                  </motion.a>
+                  <motion.a
+                    href="/events"
+                      className="block rounded-md px-3 py-3 text-base text-black hover:bg-gray-100 hover:text-orange-500 transition-colors"
+                    style={{ color: '#000000' }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: 0.5, ease: "easeOut" }}
+                  >
+                    Events
+                  </motion.a>
+                </div>
+              </motion.div>
+            </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Search Bar Overlay */}
+        <AnimatePresence>
+          {isSearchOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="absolute top-full left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-lg"
+            >
+              <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+                <form onSubmit={handleSearch} className="flex items-center space-x-4">
+                  <div className="flex-1 relative">
+                    <input
+                      id="search-input"
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search for photographers, videographers, services..."
+                      className="w-full px-4 py-3 pr-12 text-base text-black border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-500 hover:text-orange-500 transition-colors"
+                    >
+                      <Search className="h-5 w-5" />
+                    </button>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsSearchOpen(false)}
+                    className="px-4 py-3 text-gray-500 hover:text-gray-700 transition-colors"
+                    aria-label="Close search"
                   >
                     <X className="h-6 w-6" />
                   </button>
-
-                  <Link
-                    href="/"
-                    onClick={handleNavClick}
-                    className="flex items-center"
-                  >
-                    <Image
-                      src="/images/MeroTasbir-logo.png"
-                      alt="Mero Tasbir Logo"
-                      width={120}
-                      height={120}
-                      className="h-24 w-24"
-                    />
-                  </Link>
-
-                  <button
-                    onClick={() => setIsSignupOpen(true)}
-                    className="rounded-full bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600"
-                  >
-                    For Freelancer
-                  </button>
-                </div>
-
-                {/* Scrollable Menu */}
-                <div className="flex-1 overflow-y-auto px-4 py-6">
-                  {/* Main Links */}
-                  <div className="space-y-1">
+                </form>
+                
+                {/* Quick Search Suggestions */}
+                <div className="mt-4">
+                  <p className="text-sm text-black mb-2">Popular searches:</p>
+                  <div className="flex flex-wrap gap-2">
                     {[
-                      { label: "Home", href: "/" },
-                      { label: "Marketplace", href: "/marketplace" },
-                      { label: "Career", href: "/career" },
-                      { label: "Contact Us", href: "/contact" },
-                    ].map((item, index) => (
-                      <motion.a
-                        key={item.label}
-                        href={item.href}
-                        onClick={handleNavClick}
-                        className="block rounded-md px-3 py-3 text-lg font-medium text-black hover:bg-gray-100 hover:text-orange-500"
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + index * 0.05 }}
+                      "Wedding Photography",
+                      "Event Videography", 
+                      "Portrait Photography",
+                      "Corporate Events",
+                      "Drone Photography"
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => {
+                          setSearchQuery(suggestion);
+                          // Focus back on input
+                          setTimeout(() => {
+                            const searchInput = document.getElementById('search-input');
+                            if (searchInput) searchInput.focus();
+                          }, 100);
+                        }}
+                        className="px-3 py-1 text-sm bg-gray-100 hover:bg-orange-100 text-black hover:text-orange-700 rounded-full transition-colors"
                       >
-                        {item.label}
-                      </motion.a>
+                        {suggestion}
+                      </button>
                     ))}
-
-                    {/* Services Accordion */}
-                    <div className="mt-4">
-                      <button
-                        type="button"
-                        onClick={toggleService}
-                        className="flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-lg font-medium text-black hover:bg-gray-100"
-                      >
-                        <span>Services</span>
-                        <svg
-                          className={`h-5 w-5 transform transition-transform ${isServiceOpen ? "rotate-180" : ""}`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                      <AnimatePresence>
-                        {isServiceOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="ml-6 space-y-1 border-l-2 border-gray-200 pl-4">
-                              {services.map((item, idx) => (
-                                <motion.a
-                                  key={item.name}
-                                  href={item.href}
-                                  onClick={handleNavClick}
-                                  className="block rounded-md py-2 text-base text-black hover:bg-gray-100 hover:text-orange-500"
-                                  initial={{ opacity: 0, x: -10 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: 0.1 + idx * 0.05 }}
-                                >
-                                  {item.name}
-                                </motion.a>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Learning Hub Accordion */}
-                    <div className="mt-4">
-                      <button
-                        type="button"
-                        onClick={toggleLearning}
-                        className="flex w-full items-center justify-between rounded-md px-3 py-3 text-left text-lg font-medium text-black hover:bg-gray-100"
-                      >
-                        <span>Learning Hub</span>
-                        <svg
-                          className={`h-5 w-5 transform transition-transform ${isLearningOpen ? "rotate-180" : ""}`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                      <AnimatePresence>
-                        {isLearningOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="ml-6 space-y-1 border-l-2 border-gray-200 pl-4">
-                              {courses.map((item, idx) => (
-                                <motion.a
-                                  key={item.name}
-                                  href={item.href}
-                                  onClick={handleNavClick}
-                                  className="block rounded-md py-2 text-base text-black hover:bg-gray-100 hover:text-orange-500"
-                                  initial={{ opacity: 0, x: -10 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: 0.1 + idx * 0.05 }}
-                                >
-                                  {item.name}
-                                </motion.a>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
                   </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-          {/* Search Bar Overlay */}
-          <AnimatePresence>
-            {isSearchOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="absolute left-0 right-0 top-full z-50 border-b border-gray-200 bg-white shadow-lg"
-              >
-                <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-                  <form
-                    onSubmit={handleSearch}
-                    className="flex items-center space-x-4"
-                  >
-                    <div className="relative flex-1">
-                      <input
-                        id="search-input"
-                        type="text"
-                        value={searchQuery}
-                        onChange={e => setSearchQuery(e.target.value)}
-                        placeholder="Search for photographers, videographers, services..."
-                        className="w-full rounded-lg border border-gray-300 px-4 py-3 pr-12 text-base text-black transition-colors focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      />
-                      <button
-                        type="submit"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-500 transition-colors hover:text-orange-500"
-                      >
-                        <Search className="h-5 w-5" />
-                      </button>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setIsSearchOpen(false)}
-                      className="px-4 py-3 text-gray-500 transition-colors hover:text-gray-700"
-                      aria-label="Close search"
-                    >
-                      <X className="h-6 w-6" />
-                    </button>
-                  </form>
+        {/* Cart Modal */}
+        <CartModal
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+        />
 
-                  {/* Quick Search Suggestions */}
-                  <div className="mt-4">
-                    <p className="mb-2 text-sm text-black">Popular searches:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        "Wedding Photography",
-                        "Event Videography",
-                        "Portrait Photography",
-                        "Corporate Events",
-                        "Drone Photography",
-                      ].map(suggestion => (
-                        <button
-                          key={suggestion}
-                          onClick={() => {
-                            setSearchQuery(suggestion);
-                            // Focus back on input
-                            setTimeout(() => {
-                              const searchInput =
-                                document.getElementById("search-input");
-                              if (searchInput) searchInput.focus();
-                            }, 100);
-                          }}
-                          className="rounded-full bg-gray-100 px-3 py-1 text-sm text-black transition-colors hover:bg-orange-100 hover:text-orange-700"
-                        >
-                          {suggestion}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Cart Modal */}
-          <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-        </div>
+        {/* Change Password Modal */}
+        <ChangePasswordModal
+          isOpen={isChangePasswordOpen}
+          onClose={() => setIsChangePasswordOpen(false)}
+        />
+      </div>
       </div>
     </nav>
   );

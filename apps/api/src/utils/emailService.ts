@@ -251,6 +251,136 @@ export const emailTemplates = {
       
       If you have any questions, please contact us at support@merotasbir.com
     `
+  }),
+
+  resetPassword: (resetLink: string, userName: string) => ({
+    subject: 'Reset Your Password - Mero Tasbir',
+    html: `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Reset Your Password</title>
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+          }
+          .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+          }
+          .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #E08E45;
+            margin-bottom: 10px;
+          }
+          .reset-button {
+            display: inline-block;
+            background-color: #E08E45;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 16px;
+          }
+          .message {
+            margin: 20px 0;
+            font-size: 16px;
+          }
+          .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+          }
+          .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+          }
+          .link-text {
+            word-break: break-all;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="logo">Mero Tasbir</div>
+            <h1>Reset Your Password</h1>
+          </div>
+          
+          <div class="message">
+            <p>Hello ${userName}!</p>
+            <p>We received a request to reset your password for your Mero Tasbir account. If you made this request, click the button below to reset your password:</p>
+          </div>
+          
+          <div style="text-align: center;">
+            <a href="${resetLink}" class="reset-button">
+              Reset My Password
+            </a>
+          </div>
+          
+          <div class="warning">
+            <strong>Important:</strong> This link will expire in 1 hour for security reasons. If you didn't request this password reset, please ignore this email and your password will remain unchanged.
+          </div>
+          
+          <div class="message">
+            <p>If the button above doesn't work, you can copy and paste this link into your browser:</p>
+            <div class="link-text">${resetLink}</div>
+          </div>
+          
+          <div class="footer">
+            <p>Best regards,<br>The Mero Tasbir Team</p>
+            <p>If you have any questions, please contact us at support@merotasbir.com</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Reset Your Password - Mero Tasbir
+      
+      Hello ${userName}!
+      
+      We received a request to reset your password for your Mero Tasbir account. If you made this request, click the link below to reset your password:
+      
+      ${resetLink}
+      
+      Important: This link will expire in 1 hour for security reasons. If you didn't request this password reset, please ignore this email and your password will remain unchanged.
+      
+      Best regards,
+      The Mero Tasbir Team
+      
+      If you have any questions, please contact us at support@merotasbir.com
+    `
   })
 };
 
@@ -296,8 +426,10 @@ export const sendEmail = async (
 
 // Send verification email
 export const sendVerificationEmail = async (email: string, otp: string): Promise<boolean> => {
-  // For development/testing, log the OTP instead of sending email
-  if (process.env.NODE_ENV === 'development') {
+  // Check if we should send real emails (set SEND_REAL_EMAILS=true in .env)
+  const sendRealEmails = process.env.SEND_REAL_EMAILS === 'true';
+  
+  if (process.env.NODE_ENV === 'development' && !sendRealEmails) {
     console.log(`\n📧 VERIFICATION EMAIL (MOCK)`);
     console.log(`To: ${email}`);
     console.log(`OTP: ${otp}`);
@@ -313,5 +445,11 @@ export const sendVerificationEmail = async (email: string, otp: string): Promise
 // Send welcome email
 export const sendWelcomeEmail = async (email: string, userName: string): Promise<boolean> => {
   const template = emailTemplates.welcome(userName);
+  return await sendEmail(email, template.subject, template.html, template.text);
+};
+
+// Send reset password email
+export const sendResetPasswordEmail = async (email: string, resetLink: string, userName: string): Promise<boolean> => {
+  const template = emailTemplates.resetPassword(resetLink, userName);
   return await sendEmail(email, template.subject, template.html, template.text);
 };

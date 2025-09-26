@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar/page";
+import Footer from "@/components/Footer/page";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/contexts/CartContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +34,11 @@ export default function RootLayout({
         style={{ backgroundColor: 'white' }}
       >
         <CartProvider>
-          <Navbar />
-          {children}
+          <AuthProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </AuthProvider>
           <Toaster
             position="top-right"
             toastOptions={{

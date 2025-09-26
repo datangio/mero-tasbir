@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 
 import Image from "next/image";
-import Footer from "../../components/Footer/page";
 
 
 // Sample job data
@@ -107,7 +106,7 @@ export default function CareerPage() {
 
   return (
     <div className="min-h-screen bg-white">
-
+     
 
 <section className="relative h-[600px] overflow-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/images/career-hero.jpg')" }}>
         <div className="absolute inset-0 bg-black/50"></div>
@@ -288,9 +287,6 @@ We’re looking for people to join the team who are as excited as we are to help
           ))}
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

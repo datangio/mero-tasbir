@@ -4,7 +4,9 @@ import {
   verifyOTPController,
   createUserAccountController,
   loginUserController,
-  resendOTPController
+  resendOTPController,
+  forgotPasswordController,
+  resetPasswordController
 } from '../controller/auth.controller';
 
 const router = Router();
@@ -39,7 +41,21 @@ router.post('/login', loginUserController);
  */
 router.post('/resend-otp', resendOTPController);
 
+/**
+ * POST /api/v1/auth/forgot-password
+ * Send password reset email
+ */
+router.post('/forgot-password', forgotPasswordController);
+
+/**
+ * POST /api/v1/auth/reset-password
+ * Reset password with token
+ */
+router.post('/reset-password', resetPasswordController);
+
 export default router;
+
+
 
 
 

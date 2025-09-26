@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-import Footer from "../../components/Footer/page";
 import MarketplaceModal from "../../components/MarketplaceModal/MarketplaceModal";
 
 // Full Equipment Data
@@ -432,9 +431,6 @@ export default function Marketplace() {
           </motion.div>
         </div>
       </section>
-
-      {/* Footer */}
-      <Footer />
       
       {/* Marketplace Modal */}
       <MarketplaceModal

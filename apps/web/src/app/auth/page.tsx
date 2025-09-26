@@ -6,6 +6,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { apiClient } from '@/utils/api';
+import { useAuth } from '@/contexts/AuthContext';
+import ForgotPasswordModal from '@/components/ForgotPasswordModal/ForgotPasswordModal';
 import toast from 'react-hot-toast';
 
 interface FormData {
@@ -25,6 +27,8 @@ export default function AuthPage() {
   const [emailVerified, setEmailVerified] = useState(false);
   const [userType, setUserType] = useState<'user' | 'freelancer' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const { login } = useAuth();
 
   const {
     register,
@@ -150,18 +154,13 @@ export default function AuthPage() {
       // Handle sign in
       setIsLoading(true);
       try {
-        const response = await apiClient.loginUser(data.email, data.password);
-        if (response.success) {
+        const result = await login(data.email, data.password);
+        if (result.success) {
           toast.success('Login successful!');
-          // Store token and user data
-          if (response.data?.token) {
-            localStorage.setItem('token', response.data.token);
-            localStorage.setItem('user', JSON.stringify(response.data.user));
-          }
           // Redirect to dashboard or home
-          window.location.href = '/dashboard';
+          window.location.href = '/';
         } else {
-          toast.error(response.message || 'Login failed');
+          toast.error(result.message || 'Login failed');
         }
       } catch (error) {
         console.error('Error logging in:', error);
@@ -873,9 +872,13 @@ export default function AuthPage() {
                     <input type="checkbox" className="rounded border-gray-300 text-orange-500 focus:ring-orange-500" />
                     <span className="ml-2 text-xs sm:text-sm text-gray-600">Remember me</span>
                   </label>
-                  <Link href="/forgot-password" className="text-xs sm:text-sm text-orange-500 hover:text-orange-600">
+                  <button
+                    type="button"
+                    onClick={() => setIsForgotPasswordOpen(true)}
+                    className="text-xs sm:text-sm text-orange-500 hover:text-orange-600"
+                  >
                     Forgot password?
-                  </Link>
+                  </button>
                 </div>
               )}
 
@@ -924,6 +927,13 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      <ForgotPasswordModal
+        isOpen={isForgotPasswordOpen}
+        onClose={() => setIsForgotPasswordOpen(false)}
+        onBackToLogin={() => setIsForgotPasswordOpen(false)}
+      />
     </div>
   );
 }
