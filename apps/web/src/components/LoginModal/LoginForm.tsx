@@ -56,7 +56,7 @@ export default function LoginModal({
               Welcome back
             </h1>
             <p className="mb-6 text-center text-sm text-gray-600">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <button
                 onClick={() => setIsSignupOpen(true)}
                 className="font-medium text-orange-500 hover:underline"

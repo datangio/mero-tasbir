@@ -3,7 +3,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, User, Phone, Mail, MapPin, Clock, Users } from 'lucide-react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import toast from 'react-hot-toast';
+import { API_ENDPOINTS } from '../../lib/api';
 
 interface PackageDetails {
   name: string;
@@ -20,35 +24,50 @@ interface BookingModalProps {
   packageDetails: PackageDetails | null;
 }
 
-interface BookingFormData {
-  fullName: string;
-  email: string;
-  phone: string;
-  eventDate: string;
-  eventTime: string;
-  eventLocation: string;
-  guestCount: string;
-  eventType: string;
-  specialRequirements: string;
-  packageType: string;
-}
+// Validation schema
+const bookingSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  eventDate: z.string().min(1, "Event date is required"),
+  eventTime: z.string().min(1, "Event time is required"),
+  eventLocation: z.string().min(2, "Event location must be at least 2 characters"),
+  guestCount: z.number().min(1, "Guest count must be at least 1"),
+  eventType: z.string().min(1, "Event type is required"),
+  specialRequirements: z.string().optional(),
+  packageType: z.string().min(1, "Package type is required"),
+});
+
+type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function BookingModal({ isOpen, onClose, packageDetails }: BookingModalProps) {
-  const [formData, setFormData] = useState<BookingFormData>({
-    fullName: '',
-    email: '',
-    phone: '',
-    eventDate: '',
-    eventTime: '',
-    eventLocation: '',
-    guestCount: '',
-    eventType: '',
-    specialRequirements: '',
-    packageType: packageDetails?.type || 'photography'
-  });
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+    watch,
+  } = useForm<BookingFormData>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      fullName: '',
+      email: '',
+      phone: '',
+      eventDate: '',
+      eventTime: '',
+      eventLocation: '',
+      guestCount: 1,
+      eventType: '',
+      specialRequirements: '',
+      packageType: packageDetails?.type || 'photography'
+    },
+    mode: 'onChange'
+  });
+
+  const watchedValues = watch();
 
   const eventTypes = [
     'Wedding',
@@ -61,41 +80,47 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
     'Other'
   ];
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      toast.success('Booking request submitted successfully! We will contact you within 24 hours.');
-      onClose();
-      
-      // Reset form
-      setFormData({
-        fullName: '',
-        email: '',
-        phone: '',
-        eventDate: '',
-        eventTime: '',
-        eventLocation: '',
-        guestCount: '',
-        eventType: '',
-        specialRequirements: '',
-        packageType: packageDetails?.type || 'photography'
+      // Prepare the data for API submission
+      const bookingData = {
+        ...data,
+        packageName: packageDetails?.name || '',
+        packagePrice: packageDetails?.price || '',
+      };
+
+      // Make API call to submit booking
+      const response = await fetch(API_ENDPOINTS.BOOKINGS, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
       });
-      setCurrentStep(1);
-    } catch {
-      toast.error('Failed to submit booking request. Please try again.');
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || `HTTP ${response.status}: Failed to submit booking`);
+      }
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success('Booking request submitted successfully! We will contact you within 24 hours.');
+        onClose();
+        
+        // Reset form
+        reset();
+        setCurrentStep(1);
+      } else {
+        throw new Error(result.message || 'Failed to submit booking');
+      }
+    } catch (error) {
+      console.error('Booking submission error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error(`Failed to submit booking request: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -116,11 +141,11 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
   const isStepValid = (step: number) => {
     switch (step) {
       case 1:
-        return formData.fullName && formData.email && formData.phone;
+        return watchedValues.fullName && watchedValues.email && watchedValues.phone;
       case 2:
-        return formData.eventDate && formData.eventTime && formData.eventLocation;
+        return watchedValues.eventDate && watchedValues.eventTime && watchedValues.eventLocation;
       case 3:
-        return formData.eventType && formData.guestCount;
+        return watchedValues.eventType && watchedValues.guestCount;
       default:
         return false;
     }
@@ -185,7 +210,7 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
           </div>
 
           {/* Form Content */}
-          <form onSubmit={handleSubmit} className="p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="p-6">
             {/* Step 1: Contact Information */}
             {currentStep === 1 && (
               <motion.div
@@ -202,15 +227,23 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        type="text"
+                      <Controller
                         name="fullName"
-                        value={formData.fullName}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border text-black border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                        placeholder="Enter your full name"
-                        required
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="text"
+                            className={`w-full pl-10 pr-4 py-3 border text-black rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                              errors.fullName ? 'border-red-500' : 'border-gray-300'
+                            }`}
+                            placeholder="Enter your full name"
+                          />
+                        )}
                       />
+                      {errors.fullName && (
+                        <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>
+                      )}
                     </div>
                   </div>
 
@@ -220,15 +253,23 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        type="email"
+                      <Controller
                         name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
-                        placeholder="Enter your email"
-                        required
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="email"
+                            className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black ${
+                              errors.email ? 'border-red-500' : 'border-gray-300'
+                            }`}
+                            placeholder="Enter your email"
+                          />
+                        )}
                       />
+                      {errors.email && (
+                        <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -239,15 +280,23 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                   </label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="tel"
+                    <Controller
                       name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black"
-                      placeholder="Enter your phone number"
-                      required
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          type="tel"
+                          className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-black ${
+                            errors.phone ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                          placeholder="Enter your phone number"
+                        />
+                      )}
                     />
+                    {errors.phone && (
+                      <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -269,14 +318,22 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                     </label>
                     <div className="relative">
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        type="date"
+                      <Controller
                         name="eventDate"
-                        value={formData.eventDate}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                        required
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="date"
+                            className={`w-full pl-10 pr-4 py-3 border rounded-lg text-black focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                              errors.eventDate ? 'border-red-500' : 'border-gray-300'
+                            }`}
+                          />
+                        )}
                       />
+                      {errors.eventDate && (
+                        <p className="text-red-500 text-xs mt-1">{errors.eventDate.message}</p>
+                      )}
                     </div>
                   </div>
 
@@ -286,14 +343,22 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                     </label>
                     <div className="relative">
                       <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        type="time"
+                      <Controller
                         name="eventTime"
-                        value={formData.eventTime}
-                        onChange={handleInputChange}
-                        className="w-full text-black pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                        required
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="time"
+                            className={`w-full text-black pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                              errors.eventTime ? 'border-red-500' : 'border-gray-300'
+                            }`}
+                          />
+                        )}
                       />
+                      {errors.eventTime && (
+                        <p className="text-red-500 text-xs mt-1">{errors.eventTime.message}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -304,15 +369,23 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                   </label>
                   <div className="relative">
                     <MapPin className="absolute text-black left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                    <input
-                      type="text"
+                    <Controller
                       name="eventLocation"
-                      value={formData.eventLocation}
-                      onChange={handleInputChange}
-                      className="w-full text-black pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                      placeholder="Enter event location"
-                      required
+                      control={control}
+                      render={({ field }) => (
+                        <input
+                          {...field}
+                          type="text"
+                          className={`w-full text-black pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                            errors.eventLocation ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                          placeholder="Enter event location"
+                        />
+                      )}
                     />
+                    {errors.eventLocation && (
+                      <p className="text-red-500 text-xs mt-1">{errors.eventLocation.message}</p>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -332,18 +405,26 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                     <label className="block text-sm font-medium text-black mb-2">
                       Event Type *
                     </label>
-                    <select
+                    <Controller
                       name="eventType"
-                      value={formData.eventType}
-                      onChange={handleInputChange}
-                      className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                      required
-                    >
-                      <option value="">Select event type</option>
-                      {eventTypes.map((type) => (
-                        <option key={type} value={type}>{type}</option>
-                      ))}
-                    </select>
+                      control={control}
+                      render={({ field }) => (
+                        <select
+                          {...field}
+                          className={`w-full text-black px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                            errors.eventType ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                        >
+                          <option value="">Select event type</option>
+                          {eventTypes.map((type) => (
+                            <option key={type} value={type}>{type}</option>
+                          ))}
+                        </select>
+                      )}
+                    />
+                    {errors.eventType && (
+                      <p className="text-red-500 text-xs mt-1">{errors.eventType.message}</p>
+                    )}
                   </div>
 
                   <div>
@@ -352,16 +433,25 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                     </label>
                     <div className="relative">
                       <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                      <input
-                        type="number"
+                      <Controller
                         name="guestCount"
-                        value={formData.guestCount}
-                        onChange={handleInputChange}
-                        className="w-full text-black pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                        placeholder="Number of guests"
-                        min="1"
-                        required
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            {...field}
+                            type="number"
+                            onChange={(e) => field.onChange(parseInt(e.target.value) || 0)}
+                            className={`w-full text-black pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                              errors.guestCount ? 'border-red-500' : 'border-gray-300'
+                            }`}
+                            placeholder="Number of guests"
+                            min="1"
+                          />
+                        )}
                       />
+                      {errors.guestCount && (
+                        <p className="text-red-500 text-xs mt-1">{errors.guestCount.message}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -370,14 +460,23 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
                   <label className="block text-sm font-medium text-black mb-2">
                     Special Requirements
                   </label>
-                  <textarea
+                  <Controller
                     name="specialRequirements"
-                    value={formData.specialRequirements}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                    placeholder="Any special requirements, dietary restrictions, or additional notes..."
+                    control={control}
+                    render={({ field }) => (
+                      <textarea
+                        {...field}
+                        rows={4}
+                        className={`w-full text-black px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 ${
+                          errors.specialRequirements ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                        placeholder="Any special requirements, dietary restrictions, or additional notes..."
+                      />
+                    )}
                   />
+                  {errors.specialRequirements && (
+                    <p className="text-red-500 text-xs mt-1">{errors.specialRequirements.message}</p>
+                  )}
                 </div>
 
                 {/* Package Summary */}
@@ -428,9 +527,9 @@ export default function BookingModal({ isOpen, onClose, packageDetails }: Bookin
               ) : (
                 <button
                   type="submit"
-                  disabled={isSubmitting || !isStepValid(3)}
+                  disabled={isSubmitting || !isValid}
                   className={`px-8 py-3 rounded-lg font-medium transition-colors ${
-                    isSubmitting || !isStepValid(3)
+                    isSubmitting || !isValid
                       ? 'bg-gray-100 text-black cursor-not-allowed'
                       : 'bg-orange-500 text-white hover:bg-orange-600'
                   }`}

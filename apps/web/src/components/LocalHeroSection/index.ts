@@ -1,0 +1,2 @@
+export { LocalHeroSection } from './LocalHeroSection';
+

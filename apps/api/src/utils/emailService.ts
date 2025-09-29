@@ -381,6 +381,233 @@ export const emailTemplates = {
       
       If you have any questions, please contact us at support@merotasbir.com
     `
+  }),
+
+  bookingConfirmation: (bookingData: any) => ({
+    subject: 'Booking Confirmation - Mero Tasbir',
+    html: `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Booking Confirmation</title>
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+          }
+          .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+          }
+          .header {
+            text-align: center;
+            margin-bottom: 30px;
+          }
+          .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #E08E45;
+            margin-bottom: 10px;
+          }
+          .message {
+            margin: 20px 0;
+            font-size: 16px;
+          }
+          .booking-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+          }
+          .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+          }
+          .detail-row:last-child {
+            border-bottom: none;
+          }
+          .detail-label {
+            font-weight: bold;
+            color: #555;
+          }
+          .detail-value {
+            color: #333;
+          }
+          .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+          }
+          .success-message {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #155724;
+          }
+          .contact-info {
+            background-color: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #004085;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="logo">Mero Tasbir</div>
+            <h1>Booking Confirmation</h1>
+          </div>
+          
+          <div class="success-message">
+            <strong>🎉 Thank you for your booking!</strong><br>
+            Your booking request has been successfully submitted and we will contact you within 24 hours to confirm all details.
+          </div>
+          
+          <div class="message">
+            <p>Hello ${bookingData.fullName}!</p>
+            <p>Thank you for choosing Mero Tasbir for your ${bookingData.eventType.toLowerCase()} event. We're excited to help make your special day unforgettable!</p>
+          </div>
+          
+          <div class="booking-details">
+            <h3 style="margin-top: 0; color: #E08E45;">Booking Details</h3>
+            
+            <div class="detail-row">
+              <span class="detail-label">Booking ID:</span>
+              <span class="detail-value">${bookingData.id}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Event Type:</span>
+              <span class="detail-value">${bookingData.eventType}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Package:</span>
+              <span class="detail-value">${bookingData.packageName}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Event Date:</span>
+              <span class="detail-value">${new Date(bookingData.eventDate).toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Event Time:</span>
+              <span class="detail-value">${bookingData.eventTime}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Location:</span>
+              <span class="detail-value">${bookingData.eventLocation}</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Guest Count:</span>
+              <span class="detail-value">${bookingData.guestCount} guests</span>
+            </div>
+            
+            <div class="detail-row">
+              <span class="detail-label">Package Price:</span>
+              <span class="detail-value" style="font-weight: bold; color: #E08E45;">${bookingData.packagePrice}</span>
+            </div>
+            
+            ${bookingData.specialRequirements ? `
+            <div class="detail-row">
+              <span class="detail-label">Special Requirements:</span>
+              <span class="detail-value">${bookingData.specialRequirements}</span>
+            </div>
+            ` : ''}
+          </div>
+          
+          <div class="contact-info">
+            <h4 style="margin-top: 0;">📞 What's Next?</h4>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+              <li>Our team will review your booking and contact you within 24 hours</li>
+              <li>We'll confirm all details and discuss any specific requirements</li>
+              <li>You'll receive a final confirmation with payment instructions</li>
+              <li>We'll be in touch closer to your event date for final preparations</li>
+            </ul>
+          </div>
+          
+          <div class="footer">
+            <p><strong>Contact Information:</strong></p>
+            <p>📧 Email: support@merotasbir.com</p>
+            <p>📱 Phone: +977-1-XXXXXXX</p>
+            <p>🌐 Website: www.merotasbir.com</p>
+            <br>
+            <p>Best regards,<br>The Mero Tasbir Team</p>
+            <p><em>Capturing your precious moments, one frame at a time.</em></p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `
+      Booking Confirmation - Mero Tasbir
+      
+      Hello ${bookingData.fullName}!
+      
+      Thank you for your booking! Your booking request has been successfully submitted and we will contact you within 24 hours to confirm all details.
+      
+      BOOKING DETAILS:
+      ================
+      Booking ID: ${bookingData.id}
+      Event Type: ${bookingData.eventType}
+      Package: ${bookingData.packageName}
+      Event Date: ${new Date(bookingData.eventDate).toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })}
+      Event Time: ${bookingData.eventTime}
+      Location: ${bookingData.eventLocation}
+      Guest Count: ${bookingData.guestCount} guests
+      Package Price: ${bookingData.packagePrice}
+      ${bookingData.specialRequirements ? `Special Requirements: ${bookingData.specialRequirements}` : ''}
+      
+      WHAT'S NEXT:
+      ============
+      - Our team will review your booking and contact you within 24 hours
+      - We'll confirm all details and discuss any specific requirements
+      - You'll receive a final confirmation with payment instructions
+      - We'll be in touch closer to your event date for final preparations
+      
+      Contact Information:
+      ===================
+      Email: support@merotasbir.com
+      Phone: +977-1-XXXXXXX
+      Website: www.merotasbir.com
+      
+      Best regards,
+      The Mero Tasbir Team
+      Capturing your precious moments, one frame at a time.
+    `
   })
 };
 
@@ -452,4 +679,24 @@ export const sendWelcomeEmail = async (email: string, userName: string): Promise
 export const sendResetPasswordEmail = async (email: string, resetLink: string, userName: string): Promise<boolean> => {
   const template = emailTemplates.resetPassword(resetLink, userName);
   return await sendEmail(email, template.subject, template.html, template.text);
+};
+
+// Send booking confirmation email
+export const sendBookingConfirmationEmail = async (bookingData: any): Promise<boolean> => {
+  // Check if we should send real emails (set SEND_REAL_EMAILS=true in .env)
+  const sendRealEmails = process.env.SEND_REAL_EMAILS === 'true';
+  
+  if (process.env.NODE_ENV === 'development' && !sendRealEmails) {
+    console.log(`\n📧 BOOKING CONFIRMATION EMAIL (MOCK)`);
+    console.log(`To: ${bookingData.email}`);
+    console.log(`Subject: Booking Confirmation - Mero Tasbir`);
+    console.log(`Booking ID: ${bookingData.id}`);
+    console.log(`Event: ${bookingData.eventType} on ${bookingData.eventDate}`);
+    console.log(`Package: ${bookingData.packageName} - ${bookingData.packagePrice}`);
+    console.log(`\n`);
+    return true;
+  }
+  
+  const template = emailTemplates.bookingConfirmation(bookingData);
+  return await sendEmail(bookingData.email, template.subject, template.html, template.text);
 };

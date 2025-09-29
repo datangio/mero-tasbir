@@ -21,9 +21,13 @@ interface HeroSectionProps {
     ctaText: string;
     rotatingTexts: string[];
   };
+  eventImages?: {
+    corporateEvent?: string;
+    pasniCeremony?: string;
+  };
 }
 
-export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData }) => {
+export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData, eventImages }) => {
 
   const {
     openBookingForm,
@@ -34,7 +38,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
     title: "Every Moment of Your",
     subtitle: "Beautifully Captured",
     description: "The tools you need to build your photography business. Get started - like, right now.",
-    backgroundImage: "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+    backgroundImage: "/images/thumbnail.png",
     ctaText: "Get Started",
     rotatingTexts: ["Wedding", "Pasni", "Event", "Anniversary"]
   };
@@ -55,6 +59,20 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
   const imageScale = 1;
   const imageOpacity = 1;
 
+ 
+
+  // Default event images from UI package public folder
+  const defaultEventImages = {
+    corporateEvent: "/images/corporate-event.png",
+    pasniCeremony: "/images/pasni.jpg"
+  };
+
+  // Use provided images or fallback to defaults
+  const images = {
+    corporateEvent: eventImages?.corporateEvent || defaultEventImages.corporateEvent,
+    pasniCeremony: eventImages?.pasniCeremony || defaultEventImages.pasniCeremony
+  };
+
   // Events data
   const events = [
     
@@ -66,7 +84,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
       time: "9:00 AM - 6:00 PM",
       guests: "200+",
       description: "Professional corporate event documentation with high-quality photography services. Perfect for conferences, seminars, product launches, and company celebrations.",
-      image: "/images/corporate-event.png"
+        image: images.corporateEvent
     },
     {
       id: 3,
@@ -76,7 +94,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
       time: "10:00 AM - 4:00 PM",
       guests: "80+",
       description: "Traditional Pasni ceremony photography capturing the cultural significance and joy of this important milestone in a child's life. We respect and document traditional customs beautifully.",
-      image: "/images/pasni.jpg"
+      image: images.pasniCeremony
     }
   ];
 
@@ -95,8 +113,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-  
-
       <motion.div
         className="flex flex-col lg:flex-row"
         initial={{ opacity: 0, y: 20 }}
@@ -144,7 +160,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                       duration: 3,
                       ease: "easeInOut",
                     }}
-                    className="inline-block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold ballmain-regular"
+                    className="inline-block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold title-regular italic"
                   >
                     {weddingTypes[currentWeddingType]}
                   </motion.span>
@@ -177,7 +193,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onGetStarted}
-                  className="w-full sm:w-auto rounded-lg bg-black px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl uppercase"
+                  className="w-full sm:w-auto rounded-lg bg-orange-500 px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl uppercase"
                 >
                   {data.ctaText}
                 </motion.button>
@@ -185,7 +201,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setIsVideoModalOpen(true)}
-                  className="w-full sm:w-auto rounded-lg border-2 border-black bg-transparent px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg font-semibold text-black shadow-lg transition-all duration-300 hover:bg-black hover:text-white"
+                  className="w-full sm:w-auto rounded-lg border-2 border-orange-500 bg-transparent px-6 sm:px-8 lg:px-12 py-3 sm:py-4 text-base sm:text-lg font-semibold text-black shadow-lg transition-all duration-300 hover:bg-black hover:text-white"
                 >
                   HOW IT WORKS
                 </motion.button>
@@ -204,12 +220,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
           >
             {/* Single Static Image */}
             <div className="relative h-[50vh] sm:h-[60vh] lg:h-[80vh] w-full overflow-hidden">
-              <div
+               <img 
+                 src={data.backgroundImage} 
+                 alt="Hero Section" 
+                 className="w-full h-full object-cover" 
+               />
+              {/* <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
                   backgroundImage: `url('${data.backgroundImage}')`,
                 }}
-              />
+              /> */}
             </div>
           </motion.div>
         </div>
@@ -224,10 +245,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
       />
 
 
-<div className="bg-white text-black py-8 sm:py-12 lg:py-16">
+<div className="bg-white text-black pb-8 ">
         <div className="container mx-auto px-4 sm:px-8 text-center">
           <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 ballmain-regular"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 title-regular"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -350,7 +371,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                       <img
                         src={event.image}
                         alt={event.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                       
                       {/* Overlay */}
@@ -389,7 +410,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
 
           {/* Call to Action */}
           <motion.div
-          className="mt-6 text-center"
+          className="mt-6 text-center pb-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -513,7 +534,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                     <img
                       src="https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                       alt="Wedding Project"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
@@ -524,7 +545,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                         <img
                           src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                           alt="Sarah Johnson"
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-contain"
                         />
                       </div>
                       <div>
@@ -544,7 +565,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                     <img
                       src="https://images.unsplash.com/photo-1529626465617-a207a7bb2348?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                       alt="Pasni Project"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
@@ -555,7 +576,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                         <img
                           src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                           alt="Rajesh Sharma"
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-contain"
                         />
                       </div>
                       <div>
@@ -575,7 +596,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                     <img
                       src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
                       alt="Event Project"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   </div>
@@ -586,7 +607,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
                         <img
                           src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                           alt="Priya Singh"
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-contain"
                         />
                       </div>
                       <div>
@@ -829,7 +850,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onGetStarted, heroData
               {/* Video Container */}
               <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black shadow-2xl">
                 <video
-                  className="h-full w-full object-cover"
+                  className="h-full w-full object-contain"
                   controls
                   autoPlay
                   muted

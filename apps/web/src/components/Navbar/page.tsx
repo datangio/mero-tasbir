@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ShoppingCart, User, AlignLeft, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSession, signOut } from "next-auth/react";
 import CartModal from "../CartModal/CartModal";
 import ChangePasswordModal from "../ChangePasswordModal/ChangePasswordModal";
-import Link from "next/link";
+import UploadModal from "../UploadModal/UploadModal";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -18,8 +20,37 @@ export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const { cartCount, isCartOpen, setIsCartOpen } = useCart();
   const { user, logout } = useAuth();
+  const { data: session } = useSession();
+
+  // Get current user from either AuthContext or NextAuth session
+  const getCurrentUser = () => {
+    // Priority: NextAuth session first (Google OAuth), then AuthContext (email/password)
+    if (session?.user) {
+      return {
+        fullName: session.user.name || '',
+        username: session.user.email?.split('@')[0] || '',
+        email: session.user.email || ''
+      };
+    }
+    return user;
+  };
+
+  const currentUser = getCurrentUser();
+
+  // Unified logout function that handles both auth systems
+  const handleLogout = () => {
+    if (session?.user) {
+      // NextAuth session (Google OAuth)
+      signOut({ callbackUrl: '/' });
+    } else if (user) {
+      // AuthContext (email/password)
+      logout();
+    }
+    setIsUserMenuOpen(false);
+  };
 
   // Toggle Learning Hub menu on click
   const toggleLearningHub = () => {
@@ -96,13 +127,15 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="flex items-center">
-            <Image
-              src="/images/MeroTasbir-logo.png"
-              alt="Mero Tasbir Logo"
-              width={120}
-              height={120}
-              className="h-24 w-24 lg:h-28 lg:w-28"
-            />
+            <Link href="/" className="cursor-pointer">
+              <Image
+                src="/images/MeroTasbir-logo.png"
+                alt="Mero Tasbir Logo"
+                width={120}
+                height={120}
+                className="h-24 w-24 lg:h-28 lg:w-28 hover:opacity-80 transition-opacity duration-200"
+              />
+            </Link>
           </div>
 
           {/* Spacer to push right side icons to the right */}
@@ -112,6 +145,7 @@ export default function Navbar() {
           <div className="hidden nav-item space-x-5 xl:space-xl-3 text-black">
             {[
               { label: "Home", href: "/" },
+              { label: "Gallery", href: "/gallery" },
               { label: "Marketplace", href: "/marketplace" },
               { label: "For Freelancer", href: "/freelancer" },
               { label: "Career", href: "/career" },
@@ -317,7 +351,7 @@ export default function Navbar() {
               <User className="h-6 w-6" />
               </a>
 
-              {user ? (
+              {currentUser ? (
                 <div
                   className="group relative"
                   onMouseEnter={() => setIsUserMenuOpen(true)}
@@ -333,7 +367,7 @@ export default function Navbar() {
                       isUserMenuOpen ? "bg-orange-100 text-orange-600" : "text-black hover:bg-gray-100"
                     }`}
                   >
-                    Hi, {user.fullName || user.username}
+                    Hi, {currentUser.fullName || currentUser.username}
                   </button>
 
                   {/* User Dropdown Menu */}
@@ -346,27 +380,43 @@ export default function Navbar() {
                     style={{ top: "100%" }}
                     onClick={e => e.stopPropagation()}
                   >
-                    <div className="py-2 min-w-[200px]">
-                      <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="text-sm font-medium text-gray-900">{user.fullName || user.username}</p>
-                        <p className="text-xs text-gray-500">{user.email}</p>
+                      <div className="py-2 min-w-[200px]">
+                        <div className="px-4 py-2 border-b border-gray-100">
+                          <p className="text-sm font-medium text-gray-900">{currentUser.fullName || currentUser.username}</p>
+                          <p className="text-xs text-gray-500">{currentUser.email}</p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            setIsUploadModalOpen(true);
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          Submit an Image
+                        </button>
+                        <a
+                          href="/analytics"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors block"
+                        >
+                          My Analytics
+                        </a>
+                        <button
+                          onClick={() => {
+                            setIsChangePasswordOpen(true);
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          Change Password
+                        </button>
+                        <button
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          Logout
+                        </button>
                       </div>
-                      <button
-                        onClick={() => {
-                          setIsChangePasswordOpen(true);
-                          setIsUserMenuOpen(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                      >
-                        Change Password
-                      </button>
-                      <button
-                        onClick={logout}
-                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                      >
-                        Logout
-                      </button>
-                    </div>
                   </div>
                 </div>
               ) : (
@@ -446,13 +496,15 @@ export default function Navbar() {
 
               {/* Logo */}
               <div className="flex items-center">
-                <Image
-                  src="/images/MeroTasbir-logo.png"
-                  alt="Mero Tasbir Logo"
-                  width={120}
-                  height={120}
-                  className="h-24 w-24"
-                />
+                <Link href="/" className="cursor-pointer">
+                  <Image
+                    src="/images/MeroTasbir-logo.png"
+                    alt="Mero Tasbir Logo"
+                    width={120}
+                    height={120}
+                    className="h-24 w-24 hover:opacity-80 transition-opacity duration-200"
+                  />
+                </Link>
               </div>
               
               {/* Spacer to push right side icons to the right */}
@@ -460,7 +512,7 @@ export default function Navbar() {
               
               {/* Top Right Icons */}
               <div className="flex items-center space-x-3">
-                {user ? (
+                {currentUser ? (
                   <div
                     className="group relative"
                     onMouseEnter={() => setIsUserMenuOpen(true)}
@@ -476,7 +528,7 @@ export default function Navbar() {
                         isUserMenuOpen ? "bg-orange-100 text-orange-600" : "text-black hover:bg-gray-100"
                       }`}
                     >
-                      Hi, {user.fullName || user.username}
+                      Hi, {currentUser.fullName || currentUser.username}
                     </button>
 
                     {/* User Dropdown Menu - Mobile */}
@@ -491,9 +543,25 @@ export default function Navbar() {
                     >
                       <div className="py-2 min-w-[200px]">
                         <div className="px-4 py-2 border-b border-gray-100">
-                          <p className="text-sm font-medium text-gray-900">{user.fullName || user.username}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
+                          <p className="text-sm font-medium text-gray-900">{currentUser.fullName || currentUser.username}</p>
+                          <p className="text-xs text-gray-500">{currentUser.email}</p>
                         </div>
+                        <button
+                          onClick={() => {
+                            setIsUploadModalOpen(true);
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        >
+                          Submit an Image
+                        </button>
+                        <a
+                          href="/analytics"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors block"
+                        >
+                          My Analytics
+                        </a>
                         <button
                           onClick={() => {
                             setIsChangePasswordOpen(true);
@@ -504,7 +572,7 @@ export default function Navbar() {
                           Change Password
                         </button>
                         <button
-                          onClick={logout}
+                          onClick={handleLogout}
                           className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                         >
                           Logout
@@ -541,6 +609,7 @@ export default function Navbar() {
               <div className="space-y-1">
               {[
                 { label: "Home", href: "/" },
+                { label: "Gallery", href: "/gallery" },
                 { label: "Marketplace", href: "/marketplace" },
                 { label: "For Freelancer", href: "/freelancer" },
                 { label: "Career", href: "/career" },
@@ -679,6 +748,12 @@ export default function Navbar() {
         <ChangePasswordModal
           isOpen={isChangePasswordOpen}
           onClose={() => setIsChangePasswordOpen(false)}
+        />
+
+        {/* Upload Photography Modal */}
+        <UploadModal
+          isOpen={isUploadModalOpen}
+          onClose={() => setIsUploadModalOpen(false)}
         />
       </div>
       </div>

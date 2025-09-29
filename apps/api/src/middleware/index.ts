@@ -22,6 +22,7 @@ export {
   securityHeaders,
   ipWhitelist,
   userAgentValidator,
+  authenticateToken,
 } from "./security";
 
 // Modern Zod-based validation middleware (RECOMMENDED)

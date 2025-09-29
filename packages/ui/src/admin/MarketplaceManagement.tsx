@@ -4,8 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit, Trash2, Eye, EyeOff, Star, StarOff, Search, Filter, X, MapPin, User, Heart } from 'lucide-react';
-import { Button } from '../button';
-import { Card } from '../card';
+// Using regular HTML buttons instead of custom Button component
 
 interface MarketplaceItem {
   id: string;
@@ -213,8 +212,16 @@ const MarketplaceManagement: React.FC = () => {
       condition: item.condition,
       availability: item.availability,
       quantity: item.quantity,
-      seller: item.seller,
-      location: item.location || {
+      seller: {
+        ...item.seller,
+        rating: item.seller.rating || 0,
+        reviewCount: item.seller.reviewCount || 0
+      },
+      location: item.location ? {
+        city: item.location.city || '',
+        country: item.location.country || '',
+        coordinates: item.location.coordinates || { lat: 0, lng: 0 }
+      } : {
         city: '',
         country: '',
         coordinates: { lat: 0, lng: 0 },
@@ -396,20 +403,20 @@ const MarketplaceManagement: React.FC = () => {
           <h2 className="text-2xl font-bold text-black">Marketplace Management</h2>
           <p className="text-gray-600">Manage marketplace items and listings</p>
         </div>
-        <Button
+        <button
           onClick={() => {
             resetForm();
             setIsModalOpen(true);
           }}
-          className="bg-orange-500 hover:bg-orange-600 text-white"
+          className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg flex items-center gap-2"
         >
-          <Plus className="w-4 h-4 mr-2" />
+          <Plus className="w-4 h-4" />
           Add Item
-        </Button>
+        </button>
       </div>
 
       {/* Filters */}
-      <Card className="p-4">
+      <div className="p-4 bg-white rounded-lg shadow-sm border">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <div className="relative">
@@ -452,12 +459,12 @@ const MarketplaceManagement: React.FC = () => {
             <option value="not_featured">Not Featured</option>
           </select>
         </div>
-      </Card>
+      </div>
 
       {/* Items Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredItems.map((item) => (
-          <Card key={item.id} className="overflow-hidden">
+          <div key={item.id} className="overflow-hidden bg-white rounded-lg shadow-sm border">
             {item.images.length > 0 && (
               <div className="h-48 overflow-hidden">
                 <img
@@ -522,40 +529,35 @@ const MarketplaceManagement: React.FC = () => {
 
               <div className="flex justify-between items-center">
                 <div className="flex space-x-1">
-                  <Button
-                    size="sm"
-                    variant="outline"
+                  <button
                     onClick={() => handleEdit(item)}
+                    className="p-2 border border-gray-300 rounded hover:bg-gray-50"
                   >
                     <Edit className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
+                  </button>
+                  <button
                     onClick={() => handleToggleStatus(item.id)}
+                    className="p-2 border border-gray-300 rounded hover:bg-gray-50"
                   >
                     {item.isActive ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
+                  </button>
+                  <button
                     onClick={() => handleToggleFeatured(item.id)}
+                    className="p-2 border border-gray-300 rounded hover:bg-gray-50"
                   >
                     {item.isFeatured ? <StarOff className="w-4 h-4" /> : <Star className="w-4 h-4" />}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
+                  </button>
+                  <button
                     onClick={() => handleDelete(item.id)}
-                    className="text-red-600 hover:text-red-700"
+                    className="p-2 border border-gray-300 rounded hover:bg-gray-50 text-red-600 hover:text-red-700"
                   >
                     <Trash2 className="w-4 h-4" />
-                  </Button>
+                  </button>
                 </div>
                 <span className="text-xs text-gray-500 capitalize">{item.condition}</span>
               </div>
             </div>
-          </Card>
+          </div>
         ))}
       </div>
 
@@ -579,13 +581,12 @@ const MarketplaceManagement: React.FC = () => {
                   <h3 className="text-xl font-bold text-black">
                     {editingItem ? 'Edit Marketplace Item' : 'Add New Marketplace Item'}
                   </h3>
-                  <Button
-                    variant="outline"
-                    size="sm"
+                  <button
                     onClick={() => setIsModalOpen(false)}
+                    className="p-2 border border-gray-300 rounded hover:bg-gray-50"
                   >
                     <X className="w-4 h-4" />
-                  </Button>
+                  </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -791,9 +792,9 @@ const MarketplaceManagement: React.FC = () => {
                         placeholder="Image URL"
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
-                      <Button type="button" onClick={addImage} size="sm">
+                      <button type="button" onClick={addImage} className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
                         Add
-                      </Button>
+                      </button>
                     </div>
                   </div>
 
@@ -825,26 +826,26 @@ const MarketplaceManagement: React.FC = () => {
                         placeholder="Add a tag"
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
-                      <Button type="button" onClick={addTag} size="sm">
+                      <button type="button" onClick={addTag} className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">
                         Add
-                      </Button>
+                      </button>
                     </div>
                   </div>
 
                   <div className="flex justify-end space-x-4">
-                    <Button
+                    <button
                       type="button"
-                      variant="outline"
                       onClick={() => setIsModalOpen(false)}
+                      className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
                     >
                       Cancel
-                    </Button>
-                    <Button
+                    </button>
+                    <button
                       type="submit"
-                      className="bg-orange-500 hover:bg-orange-600 text-white"
+                      className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded"
                     >
                       {editingItem ? 'Update Item' : 'Create Item'}
-                    </Button>
+                    </button>
                   </div>
                 </form>
               </div>

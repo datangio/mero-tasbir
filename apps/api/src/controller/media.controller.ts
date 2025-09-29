@@ -134,11 +134,30 @@ export const updateMedia = asyncHandler(async (req: Request, res: Response) => {
 export const deleteMedia = asyncHandler(async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    await mediaService.deleteMedia(id);
-    
-    res.json({
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+      return;
+    }
+
+    const deletedMedia = await mediaService.deleteMedia(id, userId);
+
+    if (!deletedMedia) {
+      res.status(404).json({
+        success: false,
+        message: "Media not found or you don't have permission to delete it",
+      });
+      return;
+    }
+
+    res.status(200).json({
       success: true,
       message: "Media deleted successfully",
+      data: deletedMedia,
     });
   } catch (error: any) {
     console.error('Delete media error:', error);
@@ -223,7 +242,6 @@ export const getClientPortfolio = asyncHandler(async (req: Request, res: Respons
 
 export const uploadMedia = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const validatedData = mediaUploadSchema.parse(req.body);
     const files = req.files as Express.Multer.File[];
     
     if (!files || files.length === 0) {
@@ -236,20 +254,58 @@ export const uploadMedia = asyncHandler(async (req: Request, res: Response) => {
 
     const uploadedMedia = [];
     
-    for (const file of files) {
-      const mediaData = {
+    // Parse metadata array if provided
+    let metadataArray = [];
+    if (req.body.metadata) {
+      try {
+        metadataArray = JSON.parse(req.body.metadata);
+      } catch (error) {
+        console.error('Error parsing metadata:', error);
+      }
+    }
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      let mediaData;
+      
+      if (metadataArray.length > i && metadataArray[i]) {
+        // New format: metadata array
+        const metadata = metadataArray[i];
+        mediaData = {
+          title: metadata.title || file.originalname.split('.')[0] || 'Untitled',
+          url: generateFileUrl(file.filename),
+          thumbnailUrl: generateThumbnailUrl(file.filename),
+          type: 'image',
+          category: metadata.category || 'Other',
+          clientName: req.body.clientName || 'user',
+          description: metadata.description || '',
+          tags: metadata.tags || [],
+          price: parseFloat(metadata.price) || 0,
+          uploadedBy: (req as any).user?.id,
+        };
+      } else {
+        // Old format: single metadata (for backward compatibility)
+        mediaData = {
+          title: req.body.title || file.originalname.split('.')[0] || 'Untitled',
+          url: generateFileUrl(file.filename),
+          thumbnailUrl: generateThumbnailUrl(file.filename),
+          type: 'image',
+          category: req.body.category || 'Other',
+          clientName: req.body.clientName || 'user',
+          description: req.body.description || '',
+          tags: req.body.tags ? JSON.parse(req.body.tags) : [],
+          price: parseFloat(req.body.price) || 0,
+          uploadedBy: (req as any).user?.id,
+        };
+      }
+
+      console.log(`Processing file ${i}:`, {
         filename: file.filename,
-        originalName: file.originalname,
-        mimeType: file.mimetype,
-        size: file.size,
-        url: generateFileUrl(file.filename),
-        thumbnailUrl: generateThumbnailUrl(file.filename),
-        category: validatedData.category as MediaCategory,
-        clientName: validatedData.clientName,
-        description: validatedData.description,
-        tags: validatedData.tags || [],
-        uploadedBy: (req as any).user?.id, // Assuming user is attached to request
-      };
+        title: mediaData.title,
+        category: mediaData.category,
+        price: mediaData.price
+      });
 
       const media = await mediaService.createMedia(mediaData);
       uploadedMedia.push(media);
@@ -279,5 +335,33 @@ export const uploadMedia = asyncHandler(async (req: Request, res: Response) => {
         message: "Internal server error",
       });
     }
+  }
+});
+
+export const getUserMedia = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.id;
+
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+      return;
+    }
+
+    const userMedia = await mediaService.getMediaByUser(userId);
+
+    res.status(200).json({
+      success: true,
+      message: "User media retrieved successfully",
+      data: userMedia,
+    });
+  } catch (error: any) {
+    console.error('Get user media error:', error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 });

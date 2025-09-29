@@ -205,7 +205,9 @@ export const GalleryManagement: React.FC<GalleryManagementProps> = ({
     setGalleryImages(prev => {
       const newImages = [...prev];
       const [movedImage] = newImages.splice(fromIndex, 1);
-      newImages.splice(toIndex, 0, movedImage);
+      if (movedImage) {
+        newImages.splice(toIndex, 0, movedImage);
+      }
       return newImages.map((img, index) => ({ ...img, order: index }));
     });
   };
@@ -533,7 +535,7 @@ export const GalleryManagement: React.FC<GalleryManagementProps> = ({
                 />
               ) : gallery.images && gallery.images.length > 0 ? (
                 <img
-                  src={gallery.images[0].url}
+                  src={gallery.images[0]?.url || ''}
                   alt={gallery.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />

@@ -6,6 +6,7 @@ import Footer from "@/components/Footer/page";
 import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/contexts/CartContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import SessionProvider from "@/components/providers/SessionProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,12 +34,14 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white`}
         style={{ backgroundColor: 'white' }}
       >
-        <CartProvider>
-          <AuthProvider>
-            <Navbar />
-            {children}
-            <Footer />
-          </AuthProvider>
+        <SessionProvider>
+          <CartProvider>
+            <AuthProvider>
+              <Navbar />
+              {children}
+              <Footer />
+            </AuthProvider>
+          </CartProvider>
           <Toaster
             position="top-right"
             toastOptions={{
@@ -63,7 +66,7 @@ export default function RootLayout({
               },
             }}
           />
-        </CartProvider>
+        </SessionProvider>
       </body>
     </html>
   );

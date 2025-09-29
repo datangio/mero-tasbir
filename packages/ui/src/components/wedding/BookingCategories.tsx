@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Calendar, Heart, Camera, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { GalleryModal } from "./GalleryModal";
 
 const categories = [
   {
@@ -50,6 +51,8 @@ interface BookingCategoriesProps {
 export const BookingCategories: React.FC<BookingCategoriesProps> = ({ 
   onCategorySelect 
 }) => {
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
  
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -146,19 +149,23 @@ export const BookingCategories: React.FC<BookingCategoriesProps> = ({
 
                   {/* Content - Compact at bottom */}
                   <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between">
-                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-gray-700 mb-2">
+                   
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-gray-700">
                       {category.title}
                     </h3>
-                    <a 
-                      href="#" 
-                      className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Handle view gallery action
-                      }}
-                    >
-                      View Gallery
-                    </a>
+
+                    <div className="flex items-center justify-between mb-2">
+                      <button 
+                        className="text-xs sm:text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors duration-200"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedCategory(category.id);
+                          setIsGalleryOpen(true);
+                        }}
+                      >
+                        View Gallery
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -170,8 +177,16 @@ export const BookingCategories: React.FC<BookingCategoriesProps> = ({
 
        
 
-      
+       
       </div>
+
+      {/* Gallery Modal */}
+      <GalleryModal
+        isOpen={isGalleryOpen}
+        onClose={() => setIsGalleryOpen(false)}
+        category={selectedCategory}
+        images={[]}
+      />
     </div>
   );
 };

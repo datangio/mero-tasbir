@@ -132,7 +132,7 @@ export const BookingManagement: React.FC = () => {
                   </div>
                 ) : showHeroForm ? (
                   <HeroSectionForm
-                    initialData={heroSectionData}
+                    initialData={heroSectionData || undefined}
                     onSave={handleHeroSectionSave}
                     onCancel={handleHeroSectionCancel}
                   />
@@ -189,7 +189,7 @@ export const BookingManagement: React.FC = () => {
               {/* Modal Content */}
               <div className="overflow-y-auto max-h-[calc(90vh-120px)]">
                 <HeroSectionForm
-                  initialData={heroSectionData}
+                  initialData={heroSectionData || undefined}
                   onSave={handleHeroSectionSave}
                   onCancel={handleHeroSectionCancel}
                 />
@@ -255,7 +255,7 @@ const HeroSectionManagement: React.FC<HeroSectionManagementProps> = ({ heroSecti
             <div className="mb-6">
               <h4 className="text-sm font-medium text-gray-700 mb-3">Rotating Texts:</h4>
               <div className="flex flex-wrap gap-2">
-                {heroContent.rotatingTexts.map((text, index) => (
+                {heroContent.rotatingTexts.map((text: string, index: number) => (
                   <span
                     key={index}
                     className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"

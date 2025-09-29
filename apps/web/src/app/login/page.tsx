@@ -3,11 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Mail, Phone } from "lucide-react";
+import { signIn, useSession } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 export default function LoginPage() {
   const [loginMethod, setLoginMethod] = useState<"email" | "phone">("email");
   const [countryCode, setCountryCode] = useState("+977");
   const [passwordVisible, setPasswordVisible] = useState(false); // Toggle password visibility
+  const { data: session, status } = useSession();
+  const [hasShownToast, setHasShownToast] = useState(false);
 
   const countryCodes = [
     { code: "+1", name: "United States" },
@@ -24,10 +29,37 @@ export default function LoginPage() {
     setPasswordVisible(prev => !prev);
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await signIn("google", {
+        callbackUrl: "/",
+        redirect: true,
+      });
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      toast.error("Failed to sign in with Google. Please try again.");
+    }
+  };
+
+  // Show toast when user successfully signs in (only once)
+  useEffect(() => {
+    if (session?.user && status === "authenticated" && !hasShownToast) {
+      const isGoogleUser = session.user.email && session.user.image;
+      if (isGoogleUser) {
+        // On login page, always show welcome back message
+        toast.success(`Welcome back, ${session.user.name || session.user.email}! 👋`, {
+          duration: 3000,
+        });
+        
+        setHasShownToast(true);
+      }
+    }
+  }, [session, status, hasShownToast]);
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Left Side: Image (Hidden on mobile) */}
-      <div className="hidden items-center justify-center p-8 lg:flex lg:w-1/2">
+      <div className="login-image-container">
         <div className="relative">
           <Image
             src="/images/MeroTasbir-logo.png"
@@ -38,10 +70,42 @@ export default function LoginPage() {
             priority
           />
         </div>
+        <style jsx>{`
+          .login-image-container {
+            display: none;
+          }
+          
+          @media (min-width: 1024px) {
+            .login-image-container {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 1rem 2rem 1rem 2rem;
+              width: 50%;
+            }
+          }
+        `}</style>
       </div>
 
       {/* Right Side: Login Form */}
-      <div className="flex w-full items-start justify-center px-6 py-0 lg:w-1/2">
+      <div className="login-form-container">
+        <style jsx>{`
+          .login-form-container {
+            display: flex;
+            width: 100%;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem 1rem;
+          }
+          
+          @media (min-width: 1024px) {
+            .login-form-container {
+              width: 50%;
+              align-items: center;
+              padding: 2rem 1.5rem;
+            }
+          }
+        `}</style>
         <div className="w-full max-w-md">
           {/* Logo */}
           {/* <div className="mb-6 flex justify-center">
@@ -239,6 +303,7 @@ export default function LoginPage() {
             <div className="flex gap-3">
               <button
                 type="button"
+                onClick={handleGoogleSignIn}
                 className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-black shadow-sm transition-colors hover:bg-gray-50 focus:outline-none"
               >
                 <svg

@@ -167,7 +167,7 @@ export default function ForgotPasswordModal({ isOpen, onClose, onBackToLogin }: 
                       Email Sent Successfully!
                     </h3>
                     <p className="text-sm text-gray-600 mb-2">
-                      We've sent a password reset link to:
+                      We&apos;ve sent a password reset link to:
                     </p>
                     <p className="text-sm font-medium text-gray-900">{email}</p>
                   </div>

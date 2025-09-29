@@ -2,10 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { signIn, useSession } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 export default function SignupPage() {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+  const { data: session, status } = useSession();
+  const [hasShownToast, setHasShownToast] = useState(false);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(prev => !prev);
@@ -15,23 +20,82 @@ export default function SignupPage() {
     setConfirmPasswordVisible(prev => !prev);
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await signIn("google", {
+        callbackUrl: "/",
+        redirect: true,
+      });
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      toast.error("Failed to sign in with Google. Please try again.");
+    }
+  };
+
+  // Show toast when user successfully signs up (only once)
+  useEffect(() => {
+    if (session?.user && status === "authenticated" && !hasShownToast) {
+      const isGoogleUser = session.user.email && session.user.image;
+      if (isGoogleUser) {
+        // On signup page, show welcome message for new account
+        toast.success(`🎉 Welcome to Mero Tasbir, ${session.user.name || session.user.email}! Your account has been created successfully.`, {
+          duration: 5000,
+        });
+        
+        setHasShownToast(true);
+      }
+    }
+  }, [session, status, hasShownToast]);
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Left Side: Geometric Art (Hidden on mobile) */}
-      <div className="hidden items-center justify-center p-8 lg:flex lg:w-1/2">
+      <div className="signup-image-container">
         <div className="relative h-64 w-64">
           <Image
             src="/images/MeroTasbir-logo.png"
             alt="Logo"
             width={256}
             height={256}
-            className="rounded-lg shadow-xl"
+            
           />
         </div>
+        <style jsx>{`
+          .signup-image-container {
+            display: none;
+          }
+          
+          @media (min-width: 1024px) {
+            .signup-image-container {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 1rem 2rem 1rem 2rem;
+              width: 50%;
+            }
+          }
+        `}</style>
       </div>
 
       {/* Right Side: Sign Up Form */}
-      <div className="flex w-full items-center justify-center p-6 lg:w-1/2">
+      <div className="signup-form-container">
+        <style jsx>{`
+          .signup-form-container {
+            display: flex;
+            width: 100%;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem 1rem;
+          }
+          
+          @media (min-width: 1024px) {
+            .signup-form-container {
+              width: 50%;
+              align-items: center;
+              padding: 0.2rem 1.5rem;
+            }
+          }
+        `}</style>
         <div className="w-full max-w-md">
           {/* Title */}
           <h1 className="mb-2 text-2xl font-semibold text-orange-500">
@@ -242,6 +306,7 @@ export default function SignupPage() {
             <div className="flex gap-3">
               <button
                 type="button"
+                onClick={handleGoogleSignIn}
                 className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-700 shadow-sm transition-colors hover:bg-gray-50"
               >
                 <svg

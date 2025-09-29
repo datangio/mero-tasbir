@@ -188,6 +188,9 @@ model User {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  // Relations
+  withdrawals     Withdrawal[]
+
   @@map("users")
 }
 
@@ -270,11 +273,52 @@ model Media {
   originalName String?
   clientName   String?
   uploadedBy   String?
+  price        Float?   // Price for selling the image
+  likes        Int      @default(0)
+  views        Int      @default(0)
+  sales        Int      @default(0)
+  totalEarnings Float   @default(0)
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  // Relations
+  mediaLikes   MediaLike[]
+  mediaSales   MediaSale[]
+
   @@map("media")
+}
+
+// Media likes model
+model MediaLike {
+  id        String   @id @default(cuid())
+  mediaId   String
+  userId    String
+  createdAt DateTime @default(now())
+
+  // Relations
+  media     Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@unique([mediaId, userId])
+  @@map("media_likes")
+}
+
+// Media sales model
+model MediaSale {
+  id          String   @id @default(cuid())
+  mediaId     String
+  buyerEmail  String
+  buyerName   String?
+  price       Float
+  status      String   @default("completed") // "pending", "completed", "cancelled"
+  paymentId   String?  // Payment reference
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  media       Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+
+  @@map("media_sales")
 }
 
 // Catering Service model
@@ -394,4 +438,70 @@ model EventEquipmentRental {
 
   @@unique([eventId, equipmentId])
   @@map("event_equipment_rentals")
+}
+
+// Booking model for package bookings
+model Booking {
+  id                  String        @id @default(cuid())
+  fullName            String
+  email               String
+  phone               String
+  eventDate           DateTime
+  eventTime           String
+  eventLocation       String
+  guestCount          Int
+  eventType           String
+  packageType         String        // photography, catering, equipment, custom
+  packageName         String
+  packagePrice        String
+  specialRequirements String?
+  bookingType         String?       // business, personal
+  businessType        String?       // for business bookings
+  personalType        String?       // for personal bookings
+  status              BookingStatus @default(PENDING)
+  adminNotes          String?
+  isActive            Boolean       @default(true)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@map("bookings")
+}
+
+// Booking status enum
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// Withdrawal tracking
+model Withdrawal {
+  id            String           @id @default(cuid())
+  userId        String
+  amount        Float
+  status        WithdrawalStatus @default(PENDING)
+  method        String           // "bank_transfer", "mobile_money", etc.
+  accountDetails Json            // Store bank details, mobile number, etc.
+  requestedAt   DateTime         @default(now())
+  processedAt   DateTime?
+  notes         String?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  // Relations
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("withdrawals")
+}
+
+// Withdrawal status enum
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  PROCESSING
+  COMPLETED
+  REJECTED
+  CANCELLED
 }

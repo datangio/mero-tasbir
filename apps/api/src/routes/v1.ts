@@ -12,6 +12,9 @@ import courseRoutes from './course.route';
 import marketplaceRoutes from './marketplace.route';
 import uploadRoutes from './upload.route';
 import authRoutes from './auth.route';
+import bookingRoutes from './booking.route';
+import analyticsRoutes from './analytics.route';
+import userRoutes from './user.route';
 
 const router: Router = Router();
 
@@ -36,6 +39,9 @@ router.get('/', (req: Request, res: Response) => {
       marketplace: '/api/v1/marketplace',
       upload: '/api/v1/upload',
       auth: '/api/v1/auth',
+      bookings: '/api/v1/bookings',
+      analytics: '/api/v1/analytics',
+      users: '/api/v1/users',
       v1: '/api/v1'
     }
   });
@@ -50,5 +56,8 @@ router.use('/courses', courseRoutes);
 router.use('/marketplace', marketplaceRoutes);
 router.use('/upload', uploadRoutes);
 router.use('/auth', authRoutes);
+router.use('/bookings', bookingRoutes);
+router.use('/analytics', analyticsRoutes);
+router.use('/users', userRoutes);
 
 export default router;

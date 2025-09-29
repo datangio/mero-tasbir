@@ -602,7 +602,9 @@ export const PackageManagement: React.FC<PackageManagementProps> = ({ className 
         ) : (
           <div className="col-span-full text-center py-12">
             <div className="text-gray-400 mb-4">
-              <Package className="w-12 h-12 mx-auto" />
+              <div className="w-12 h-12 mx-auto bg-gray-200 rounded flex items-center justify-center">
+                <span className="text-gray-500">📦</span>
+              </div>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">No packages found</h3>
             <p className="text-gray-600 mb-4">

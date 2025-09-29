@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit, Trash2, Eye, EyeOff, Search, Filter, X } from 'lucide-react';
-import { AdminButton } from './AdminButton';
-import { AdminCard } from './AdminCard';
+import { Button } from '../button';
+import { Card } from '../card';
 
 interface Course {
   id: string;
@@ -289,20 +289,20 @@ const CourseManagement: React.FC = () => {
           <h2 className="text-2xl font-bold text-black">Course Management</h2>
           <p className="text-gray-600">Manage your photography and videography courses</p>
         </div>
-        <AdminButton
+        <button
           onClick={() => {
             resetForm();
             setIsModalOpen(true);
           }}
-          variant="primary"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Course
-        </AdminButton>
+        </button>
       </div>
 
       {/* Filters */}
-      <AdminCard className="p-4">
+      <div className="p-4">
         <div className="flex flex-wrap gap-4">
           <div className="flex-1 min-w-64">
             <div className="relative">
@@ -336,12 +336,12 @@ const CourseManagement: React.FC = () => {
             <option value="inactive">Inactive</option>
           </select>
         </div>
-      </AdminCard>
+      </div>
 
       {/* Courses Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCourses.map((course) => (
-          <AdminCard key={course.id} className="overflow-hidden">
+          <div key={course.id} className="overflow-hidden">
             {course.image && (
               <div className="h-48 overflow-hidden">
                 <img
@@ -373,31 +373,28 @@ const CourseManagement: React.FC = () => {
                   )}
                 </div>
                 <div className="flex space-x-1">
-                  <AdminButton
-                    size="sm"
-                    variant="outline"
+                  <button
+                    className="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg"
                     onClick={() => handleEdit(course)}
                   >
                     <Edit className="w-4 h-4" />
-                  </AdminButton>
-                  <AdminButton
-                    size="sm"
-                    variant="outline"
+                  </button>
+                  <button
+                    className="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg"
                     onClick={() => handleToggleStatus(course.id)}
                   >
                     {course.isActive ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </AdminButton>
-                  <AdminButton
-                    size="sm"
-                    variant="danger"
+                  </button>
+                  <button
+                    className="px-3 py-1 text-sm border border-red-300 hover:bg-red-50 text-red-600 rounded-lg"
                     onClick={() => handleDelete(course.id)}
                   >
                     <Trash2 className="w-4 h-4" />
-                  </AdminButton>
+                  </button>
                 </div>
               </div>
             </div>
-          </AdminCard>
+          </div>
         ))}
       </div>
 
@@ -421,13 +418,12 @@ const CourseManagement: React.FC = () => {
                   <h3 className="text-xl font-bold text-black">
                     {editingCourse ? 'Edit Course' : 'Add New Course'}
                   </h3>
-                  <AdminButton
-                    variant="outline"
-                    size="sm"
+                  <button
+                    className="px-3 py-1 text-sm border border-gray-300 hover:bg-gray-50 rounded-lg"
                     onClick={() => setIsModalOpen(false)}
                   >
                     <X className="w-4 h-4" />
-                  </AdminButton>
+                  </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -572,9 +568,9 @@ const CourseManagement: React.FC = () => {
                         placeholder="Add a tag"
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
-                      <AdminButton type="button" onClick={addTag} size="sm">
+                      <button type="button" onClick={addTag} className="px-3 py-1 text-sm">
                         Add
-                      </AdminButton>
+                      </button>
                     </div>
                   </div>
 
@@ -603,9 +599,9 @@ const CourseManagement: React.FC = () => {
                         placeholder="Add a learning objective"
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
-                      <AdminButton type="button" onClick={addLearning} size="sm">
+                      <button type="button" onClick={addLearning} className="px-3 py-1 text-sm">
                         Add
-                      </AdminButton>
+                      </button>
                     </div>
                   </div>
 
@@ -634,9 +630,9 @@ const CourseManagement: React.FC = () => {
                         placeholder="Add a prerequisite"
                         className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
-                      <AdminButton type="button" onClick={addPrerequisite} size="sm">
+                      <button type="button" onClick={addPrerequisite} className="px-3 py-1 text-sm">
                         Add
-                      </AdminButton>
+                      </button>
                     </div>
                   </div>
 
@@ -675,26 +671,26 @@ const CourseManagement: React.FC = () => {
                         placeholder="Duration"
                         className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                       />
-                      <AdminButton type="button" onClick={addCurriculum} size="sm">
+                      <button type="button" onClick={addCurriculum} className="px-3 py-1 text-sm">
                         Add Module
-                      </AdminButton>
+                      </button>
                     </div>
                   </div>
 
                   <div className="flex justify-end space-x-4">
-                    <AdminButton
+                    <button
                       type="button"
-                      variant="outline"
+                      className="border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded-lg"
                       onClick={() => setIsModalOpen(false)}
                     >
                       Cancel
-                    </AdminButton>
-                    <AdminButton
+                    </button>
+                    <button
                       type="submit"
-                      variant="primary"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
                     >
                       {editingCourse ? 'Update Course' : 'Create Course'}
-                    </AdminButton>
+                    </button>
                   </div>
                 </form>
               </div>

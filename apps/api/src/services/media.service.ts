@@ -12,10 +12,19 @@ export class MediaService {
 
     return await prisma.media.create({
       data: {
-        ...data,
         title: data.title || data.originalName || 'Untitled',
-        type: data.type || 'IMAGE',
+        url: data.url,
+        type: data.type || 'image',
+        category: data.category,
+        clientName: data.clientName,
+        description: data.description,
         tags: data.tags || [],
+        price: data.price || 0,
+        likes: 0,
+        views: 0,
+        sales: 0,
+        totalEarnings: 0,
+        uploadedBy: data.uploadedBy,
       },
     });
   }
@@ -110,17 +119,32 @@ export class MediaService {
     });
   }
 
-  async deleteMedia(id: string) {
+  async deleteMedia(id: string, userId: string) {
     const existingMedia = await prisma.media.findUnique({
       where: { id },
     });
 
     if (!existingMedia) {
-      throw new Error('Media not found');
+      return null;
+    }
+
+    // Check if the user owns this media
+    if (existingMedia.uploadedBy !== userId) {
+      return null;
     }
 
     return await prisma.media.delete({
       where: { id },
+    });
+  }
+
+  async getMediaByUser(userId: string) {
+    return await prisma.media.findMany({
+      where: { 
+        uploadedBy: userId,
+        isActive: true 
+      },
+      orderBy: { createdAt: 'desc' },
     });
   }
 

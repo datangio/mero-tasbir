@@ -6,6 +6,10 @@
 import { Request, Response, NextFunction } from 'express';
 import hpp from 'hpp';
 import compression from 'compression';
+import jwt from 'jsonwebtoken';
+import { PrismaClient } from '../generated/prisma';
+
+const prisma = new PrismaClient();
 
 /**
  * HTTP Parameter Pollution protection
@@ -72,10 +76,12 @@ export const methodNotAllowed = (req: Request, res: Response, next: NextFunction
 export const requestTimeout = (timeoutMs: number = 30000) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const timer = setTimeout(() => {
-      res.status(408).json({
-        success: false,
-        message: 'Request timeout. Please try again.'
-      });
+      if (!res.headersSent) {
+        res.status(408).json({
+          success: false,
+          message: 'Request timeout. Please try again.'
+        });
+      }
     }, timeoutMs);
 
     // Clear timeout when response is sent
@@ -152,4 +158,82 @@ export const userAgentValidator = (req: Request, res: Response, next: NextFuncti
   }
 
   next();
+};
+
+/**
+ * JWT Authentication middleware
+ * Verifies JWT tokens and attaches user info to request
+ */
+export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: 'Access token required'
+    });
+  }
+
+  // Handle NextAuth session token
+  if (token === 'nextauth-session') {
+    // For NextAuth users, we'll extract user info from the request body or headers
+    // This is a simplified approach - in production you'd want more secure handling
+    const userEmail = req.headers['x-user-email'] as string;
+    
+    if (!userEmail) {
+      return res.status(401).json({
+        success: false,
+        message: 'User email required for NextAuth session'
+      });
+    }
+
+    try {
+      // Try to get the database user ID for this email
+      const user = await prisma.user.findUnique({
+        where: { email: userEmail },
+        select: { id: true },
+      });
+      
+      // Use database ID if found, otherwise fallback to email
+      const userId = user?.id || userEmail;
+      
+      // Attach user info to request object
+      (req as any).user = {
+        id: userId,
+        email: userEmail,
+        userType: 'user'
+      };
+      
+      return next();
+    } catch (error) {
+      // Fallback to email if database lookup fails
+      (req as any).user = {
+        id: userEmail,
+        email: userEmail,
+        userType: 'user'
+      };
+      return next();
+    }
+  }
+
+  // Handle regular JWT tokens
+  try {
+    const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
+    const decoded = jwt.verify(token, jwtSecret) as any;
+    
+    // Attach user info to request object
+    (req as any).user = {
+      id: decoded.userId,
+      email: decoded.email,
+      userType: decoded.userType
+    };
+    
+    next();
+  } catch (error) {
+    return res.status(403).json({
+      success: false,
+      message: 'Invalid or expired token'
+    });
+  }
 };

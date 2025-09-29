@@ -1,15 +1,22 @@
 export interface Media {
   id: string;
-  filename: string;
-  originalName: string;
-  mimeType: string;
-  size: number;
+  title: string;
+  filename?: string;
+  originalName?: string;
+  mimeType?: string;
+  size?: number;
   url: string;
   thumbnailUrl?: string;
-  category: MediaCategory;
+  type?: string;
+  category: string;
   clientName?: string;
   description?: string;
   tags: string[];
+  price?: number;
+  likes: number;
+  views: number;
+  sales: number;
+  totalEarnings: number;
   isActive: boolean;
   uploadedBy?: string;
   createdAt: Date;
@@ -23,26 +30,29 @@ export enum MediaCategory {
 }
 
 export interface CreateMediaData {
-  filename: string;
-  originalName: string;
-  mimeType: string;
-  size: number;
+  title: string;
+  filename?: string;
+  originalName?: string;
+  mimeType?: string;
+  size?: number;
   url: string;
   thumbnailUrl?: string;
-  title?: string;
   type?: string;
-  category: MediaCategory;
+  category: string;
   clientName?: string;
   description?: string;
   tags?: string[];
+  price?: number;
   uploadedBy?: string;
 }
 
 export interface UpdateMediaData {
-  category?: MediaCategory;
+  title?: string;
+  category?: string;
   clientName?: string;
   description?: string;
   tags?: string[];
+  price?: number;
   isActive?: boolean;
 }
 

@@ -7,7 +7,7 @@ import Footer from "../../components/Footer/page";
 
 
 export default function Events() {
-  // const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState('home');
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [activeMenuCategory, setActiveMenuCategory] = useState('snacks');
 

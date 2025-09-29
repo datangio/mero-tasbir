@@ -38,7 +38,10 @@ export const DynamicHeroSection: React.FC<DynamicHeroSectionProps> = ({ onGetSta
   return (
     <HeroSection 
       onGetStarted={onGetStarted} 
-      heroData={heroData}
+      heroData={heroData ? {
+        ...heroData,
+        ctaText: heroData.ctaText || 'Get Started'
+      } : undefined}
     />
   );
 };

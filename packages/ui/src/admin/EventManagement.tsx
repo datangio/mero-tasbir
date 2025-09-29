@@ -170,7 +170,7 @@ export const EventManagement: React.FC = () => {
       title: event.title,
       description: event.description || "",
       eventType: event.eventType,
-      eventDate: event.eventDate.split('T')[0],
+      eventDate: event.eventDate?.split('T')[0] || '',
       startTime: event.startTime || "",
       endTime: event.endTime || "",
       location: event.location,
@@ -472,7 +472,7 @@ export const EventManagement: React.FC = () => {
                     <label className="block text-sm font-medium text-black mb-1">Event Type</label>
                     <select
                       value={formData.eventType}
-                      onChange={(e) => setFormData({...formData, eventType: e.target.value})}
+                      onChange={(e) => setFormData({...formData, eventType: e.target.value as any})}
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
                       {EVENT_TYPES.map(type => (
